@@ -1,0 +1,47 @@
+﻿@model LanguageCenterWebsite.Models.Program
+
+<h2>Add Program</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        Program Name
+        @Html.TextBoxFor(m => m.programName)
+    </div>
+
+    <div>
+        Level
+        @Html.TextBoxFor(m => m.level)
+    </div>
+
+    <div>
+        Duration
+        @Html.TextBoxFor(m => m.duration)
+    </div>
+
+    <div>
+        Fee
+        @Html.TextBoxFor(m => m.fee)
+    </div>
+
+    <div>
+        Description
+        @Html.TextAreaFor(m => m.description)
+    </div>
+    <div>
+        Status
+        @Html.DropDownListFor(
+            m => m.Status,
+            new List<SelectListItem>
+            {
+                new SelectListItem { Text="Active", Value="Active" },
+                new SelectListItem { Text="Inactive", Value="Inactive" }
+            }
+        )
+    </div>
+    <br />
+
+    <button type="submit">
+        Save
+    </button>
+}

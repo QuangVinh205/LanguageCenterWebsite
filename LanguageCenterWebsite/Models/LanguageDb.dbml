@@ -11,8 +11,8 @@
       <Association Name="Class_ClassSchedule" Member="ClassSchedules" ThisKey="ClassID" OtherKey="classID" Type="ClassSchedule" />
       <Association Name="Class_Registration" Member="Registrations" ThisKey="ClassID" OtherKey="classID" Type="Registration" />
       <Association Name="ClassStatus_Class" Member="ClassStatus" ThisKey="statusID" OtherKey="StatusID" Type="ClassStatus" IsForeignKey="true" />
-      <Association Name="Program_Class" Member="Program" ThisKey="programID" OtherKey="ProgramID" Type="Program" IsForeignKey="true" />
       <Association Name="Teacher_Class" Member="Teacher" ThisKey="teacherID" OtherKey="TeacherID" Type="Teacher" IsForeignKey="true" />
+      <Association Name="Program_Class" Member="Program" ThisKey="programID" OtherKey="ProgramID" Type="Program" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ClassSchedule" Member="ClassSchedules">
@@ -66,18 +66,6 @@
       <Association Name="Student_PlacementTest" Member="Student" ThisKey="studentID" OtherKey="StudentID" Type="Student" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Program" Member="Programs">
-    <Type Name="Program">
-      <Column Name="ProgramID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="programName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="[level]" Member="level" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="duration" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="fee" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
-      <Column Name="description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="outputStandard" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="Program_Class" Member="Classes" ThisKey="ProgramID" OtherKey="programID" Type="Class" />
-    </Type>
-  </Table>
   <Table Name="dbo.Registration" Member="Registrations">
     <Type Name="Registration">
       <Column Name="RegistrationID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -124,6 +112,19 @@
       <Column Name="status" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Association Name="UserAccount_Student" Member="Students" ThisKey="UserID" OtherKey="userID" Type="Student" />
       <Association Name="UserAccount_Teacher" Member="Teachers" ThisKey="UserID" OtherKey="userID" Type="Teacher" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Program" Member="Programs">
+    <Type Name="Program">
+      <Column Name="ProgramID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="programName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="[level]" Member="level" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="duration" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="fee" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="outputStandard" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Association Name="Program_Class" Member="Classes" ThisKey="ProgramID" OtherKey="programID" Type="Class" />
     </Type>
   </Table>
 </Database>

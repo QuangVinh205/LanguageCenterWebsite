@@ -1,0 +1,34 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Program>
+
+<h2>Program List</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Level</th>
+        <th>Fee</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProgramID</td>
+            <td>@item.programName</td>
+            <td>@item.level</td>
+            <td>@item.fee</td>
+            <td>@item.Status</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProgramID })
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProgramID })
+            </td>
+        </tr>
+    }
+
+</table>
+<p>
+    @Html.ActionLink("Add Program", "Create")
+</p>

@@ -48,9 +48,6 @@ namespace LanguageCenterWebsite.Models
     partial void InsertPlacementTest(PlacementTest instance);
     partial void UpdatePlacementTest(PlacementTest instance);
     partial void DeletePlacementTest(PlacementTest instance);
-    partial void InsertProgram(Program instance);
-    partial void UpdateProgram(Program instance);
-    partial void DeleteProgram(Program instance);
     partial void InsertRegistration(Registration instance);
     partial void UpdateRegistration(Registration instance);
     partial void DeleteRegistration(Registration instance);
@@ -63,6 +60,9 @@ namespace LanguageCenterWebsite.Models
     partial void InsertUserAccount(UserAccount instance);
     partial void UpdateUserAccount(UserAccount instance);
     partial void DeleteUserAccount(UserAccount instance);
+    partial void InsertProgram(Program instance);
+    partial void UpdateProgram(Program instance);
+    partial void DeleteProgram(Program instance);
     #endregion
 		
 		public LanguageDbDataContext(string connection) : 
@@ -88,8 +88,15 @@ namespace LanguageCenterWebsite.Models
 		{
 			OnCreated();
 		}
-		
-		public System.Data.Linq.Table<Class> Classes
+
+        public LanguageDbDataContext() :
+        base(global::System.Configuration.ConfigurationManager.ConnectionStrings[
+        "LanguageWebConnectionString"].ConnectionString, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public System.Data.Linq.Table<Class> Classes
 		{
 			get
 			{
@@ -137,14 +144,6 @@ namespace LanguageCenterWebsite.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Program> Programs
-		{
-			get
-			{
-				return this.GetTable<Program>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Registration> Registrations
 		{
 			get
@@ -176,6 +175,14 @@ namespace LanguageCenterWebsite.Models
 				return this.GetTable<UserAccount>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Program> Programs
+		{
+			get
+			{
+				return this.GetTable<Program>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Class")]
@@ -204,9 +211,9 @@ namespace LanguageCenterWebsite.Models
 		
 		private EntityRef<ClassStatus> _ClassStatus;
 		
-		private EntityRef<Program> _Program;
-		
 		private EntityRef<Teacher> _Teacher;
+		
+		private EntityRef<Program> _Program;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -233,8 +240,8 @@ namespace LanguageCenterWebsite.Models
 			this._ClassSchedules = new EntitySet<ClassSchedule>(new Action<ClassSchedule>(this.attach_ClassSchedules), new Action<ClassSchedule>(this.detach_ClassSchedules));
 			this._Registrations = new EntitySet<Registration>(new Action<Registration>(this.attach_Registrations), new Action<Registration>(this.detach_Registrations));
 			this._ClassStatus = default(EntityRef<ClassStatus>);
-			this._Program = default(EntityRef<Program>);
 			this._Teacher = default(EntityRef<Teacher>);
+			this._Program = default(EntityRef<Program>);
 			OnCreated();
 		}
 		
@@ -450,40 +457,6 @@ namespace LanguageCenterWebsite.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Program_Class", Storage="_Program", ThisKey="programID", OtherKey="ProgramID", IsForeignKey=true)]
-		public Program Program
-		{
-			get
-			{
-				return this._Program.Entity;
-			}
-			set
-			{
-				Program previousValue = this._Program.Entity;
-				if (((previousValue != value) 
-							|| (this._Program.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Program.Entity = null;
-						previousValue.Classes.Remove(this);
-					}
-					this._Program.Entity = value;
-					if ((value != null))
-					{
-						value.Classes.Add(this);
-						this._programID = value.ProgramID;
-					}
-					else
-					{
-						this._programID = default(int);
-					}
-					this.SendPropertyChanged("Program");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Teacher_Class", Storage="_Teacher", ThisKey="teacherID", OtherKey="TeacherID", IsForeignKey=true)]
 		public Teacher Teacher
 		{
@@ -514,6 +487,40 @@ namespace LanguageCenterWebsite.Models
 						this._teacherID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Teacher");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Program_Class", Storage="_Program", ThisKey="programID", OtherKey="ProgramID", IsForeignKey=true)]
+		public Program Program
+		{
+			get
+			{
+				return this._Program.Entity;
+			}
+			set
+			{
+				Program previousValue = this._Program.Entity;
+				if (((previousValue != value) 
+							|| (this._Program.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Program.Entity = null;
+						previousValue.Classes.Remove(this);
+					}
+					this._Program.Entity = value;
+					if ((value != null))
+					{
+						value.Classes.Add(this);
+						this._programID = value.ProgramID;
+					}
+					else
+					{
+						this._programID = default(int);
+					}
+					this.SendPropertyChanged("Program");
 				}
 			}
 		}
@@ -1552,240 +1559,6 @@ namespace LanguageCenterWebsite.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Program")]
-	public partial class Program : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ProgramID;
-		
-		private string _programName;
-		
-		private string _level;
-		
-		private string _duration;
-		
-		private System.Nullable<decimal> _fee;
-		
-		private string _description;
-		
-		private string _outputStandard;
-		
-		private EntitySet<Class> _Classes;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnProgramIDChanging(int value);
-    partial void OnProgramIDChanged();
-    partial void OnprogramNameChanging(string value);
-    partial void OnprogramNameChanged();
-    partial void OnlevelChanging(string value);
-    partial void OnlevelChanged();
-    partial void OndurationChanging(string value);
-    partial void OndurationChanged();
-    partial void OnfeeChanging(System.Nullable<decimal> value);
-    partial void OnfeeChanged();
-    partial void OndescriptionChanging(string value);
-    partial void OndescriptionChanged();
-    partial void OnoutputStandardChanging(string value);
-    partial void OnoutputStandardChanged();
-    #endregion
-		
-		public Program()
-		{
-			this._Classes = new EntitySet<Class>(new Action<Class>(this.attach_Classes), new Action<Class>(this.detach_Classes));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProgramID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ProgramID
-		{
-			get
-			{
-				return this._ProgramID;
-			}
-			set
-			{
-				if ((this._ProgramID != value))
-				{
-					this.OnProgramIDChanging(value);
-					this.SendPropertyChanging();
-					this._ProgramID = value;
-					this.SendPropertyChanged("ProgramID");
-					this.OnProgramIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_programName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string programName
-		{
-			get
-			{
-				return this._programName;
-			}
-			set
-			{
-				if ((this._programName != value))
-				{
-					this.OnprogramNameChanging(value);
-					this.SendPropertyChanging();
-					this._programName = value;
-					this.SendPropertyChanged("programName");
-					this.OnprogramNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[level]", Storage="_level", DbType="NVarChar(50)")]
-		public string level
-		{
-			get
-			{
-				return this._level;
-			}
-			set
-			{
-				if ((this._level != value))
-				{
-					this.OnlevelChanging(value);
-					this.SendPropertyChanging();
-					this._level = value;
-					this.SendPropertyChanged("level");
-					this.OnlevelChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_duration", DbType="NVarChar(50)")]
-		public string duration
-		{
-			get
-			{
-				return this._duration;
-			}
-			set
-			{
-				if ((this._duration != value))
-				{
-					this.OndurationChanging(value);
-					this.SendPropertyChanging();
-					this._duration = value;
-					this.SendPropertyChanged("duration");
-					this.OndurationChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fee", DbType="Decimal(18,2)")]
-		public System.Nullable<decimal> fee
-		{
-			get
-			{
-				return this._fee;
-			}
-			set
-			{
-				if ((this._fee != value))
-				{
-					this.OnfeeChanging(value);
-					this.SendPropertyChanging();
-					this._fee = value;
-					this.SendPropertyChanged("fee");
-					this.OnfeeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(MAX)")]
-		public string description
-		{
-			get
-			{
-				return this._description;
-			}
-			set
-			{
-				if ((this._description != value))
-				{
-					this.OndescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._description = value;
-					this.SendPropertyChanged("description");
-					this.OndescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_outputStandard", DbType="NVarChar(MAX)")]
-		public string outputStandard
-		{
-			get
-			{
-				return this._outputStandard;
-			}
-			set
-			{
-				if ((this._outputStandard != value))
-				{
-					this.OnoutputStandardChanging(value);
-					this.SendPropertyChanging();
-					this._outputStandard = value;
-					this.SendPropertyChanged("outputStandard");
-					this.OnoutputStandardChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Program_Class", Storage="_Classes", ThisKey="ProgramID", OtherKey="programID")]
-		public EntitySet<Class> Classes
-		{
-			get
-			{
-				return this._Classes;
-			}
-			set
-			{
-				this._Classes.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Classes(Class entity)
-		{
-			this.SendPropertyChanging();
-			entity.Program = this;
-		}
-		
-		private void detach_Classes(Class entity)
-		{
-			this.SendPropertyChanging();
-			entity.Program = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Registration")]
 	public partial class Registration : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -2795,6 +2568,264 @@ namespace LanguageCenterWebsite.Models
 		{
 			this.SendPropertyChanging();
 			entity.UserAccount = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Program")]
+	public partial class Program : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ProgramID;
+		
+		private string _programName;
+		
+		private string _level;
+		
+		private string _duration;
+		
+		private System.Nullable<decimal> _fee;
+		
+		private string _description;
+		
+		private string _outputStandard;
+		
+		private string _Status;
+		
+		private EntitySet<Class> _Classes;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnProgramIDChanging(int value);
+    partial void OnProgramIDChanged();
+    partial void OnprogramNameChanging(string value);
+    partial void OnprogramNameChanged();
+    partial void OnlevelChanging(string value);
+    partial void OnlevelChanged();
+    partial void OndurationChanging(string value);
+    partial void OndurationChanged();
+    partial void OnfeeChanging(System.Nullable<decimal> value);
+    partial void OnfeeChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void OnoutputStandardChanging(string value);
+    partial void OnoutputStandardChanged();
+    partial void OnStatusChanging(string value);
+    partial void OnStatusChanged();
+    #endregion
+		
+		public Program()
+		{
+			this._Classes = new EntitySet<Class>(new Action<Class>(this.attach_Classes), new Action<Class>(this.detach_Classes));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProgramID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ProgramID
+		{
+			get
+			{
+				return this._ProgramID;
+			}
+			set
+			{
+				if ((this._ProgramID != value))
+				{
+					this.OnProgramIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProgramID = value;
+					this.SendPropertyChanged("ProgramID");
+					this.OnProgramIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_programName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string programName
+		{
+			get
+			{
+				return this._programName;
+			}
+			set
+			{
+				if ((this._programName != value))
+				{
+					this.OnprogramNameChanging(value);
+					this.SendPropertyChanging();
+					this._programName = value;
+					this.SendPropertyChanged("programName");
+					this.OnprogramNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[level]", Storage="_level", DbType="NVarChar(50)")]
+		public string level
+		{
+			get
+			{
+				return this._level;
+			}
+			set
+			{
+				if ((this._level != value))
+				{
+					this.OnlevelChanging(value);
+					this.SendPropertyChanging();
+					this._level = value;
+					this.SendPropertyChanged("level");
+					this.OnlevelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_duration", DbType="NVarChar(50)")]
+		public string duration
+		{
+			get
+			{
+				return this._duration;
+			}
+			set
+			{
+				if ((this._duration != value))
+				{
+					this.OndurationChanging(value);
+					this.SendPropertyChanging();
+					this._duration = value;
+					this.SendPropertyChanged("duration");
+					this.OndurationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fee", DbType="Decimal(18,2)")]
+		public System.Nullable<decimal> fee
+		{
+			get
+			{
+				return this._fee;
+			}
+			set
+			{
+				if ((this._fee != value))
+				{
+					this.OnfeeChanging(value);
+					this.SendPropertyChanging();
+					this._fee = value;
+					this.SendPropertyChanged("fee");
+					this.OnfeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(MAX)")]
+		public string description
+		{
+			get
+			{
+				return this._description;
+			}
+			set
+			{
+				if ((this._description != value))
+				{
+					this.OndescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._description = value;
+					this.SendPropertyChanged("description");
+					this.OndescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_outputStandard", DbType="NVarChar(MAX)")]
+		public string outputStandard
+		{
+			get
+			{
+				return this._outputStandard;
+			}
+			set
+			{
+				if ((this._outputStandard != value))
+				{
+					this.OnoutputStandardChanging(value);
+					this.SendPropertyChanging();
+					this._outputStandard = value;
+					this.SendPropertyChanged("outputStandard");
+					this.OnoutputStandardChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="VarChar(20)")]
+		public string Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Program_Class", Storage="_Classes", ThisKey="ProgramID", OtherKey="programID")]
+		public EntitySet<Class> Classes
+		{
+			get
+			{
+				return this._Classes;
+			}
+			set
+			{
+				this._Classes.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Classes(Class entity)
+		{
+			this.SendPropertyChanging();
+			entity.Program = this;
+		}
+		
+		private void detach_Classes(Class entity)
+		{
+			this.SendPropertyChanging();
+			entity.Program = null;
 		}
 	}
 }

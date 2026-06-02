@@ -1,0 +1,17 @@
+﻿@model LanguageCenterWebsite.Models.Teacher
+
+<h2>Deactivate Teacher</h2>
+
+<p>
+    Are you sure you want to deactivate
+    <strong>@Model.fullName</strong> ?
+</p>
+
+@using (Html.BeginForm("Deactivate", "Teacher"))
+{
+    @Html.HiddenFor(m => m.TeacherID)
+
+    <button type="submit" class="btn btn-danger">
+        Deactivate
+    </button>
+}

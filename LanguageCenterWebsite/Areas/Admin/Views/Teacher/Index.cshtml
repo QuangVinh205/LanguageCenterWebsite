@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Areas.Admin.Models.TeacherViewModel>
+
+<h2>Teacher List</h2>
+
+<p>
+    @Html.ActionLink("Add Teacher", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Expertise</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.TeacherID</td>
+            <td>@item.fullName</td>
+            <td>@item.expertise</td>
+            <td>@item.status</td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit",
+                    new { id = item.TeacherID })
+
+                |
+
+                @if (item.status == "Active")
+                {
+                    @Html.ActionLink(
+                        "Deactivate",
+                        "Deactivate",
+                        new { id = item.TeacherID }
+                    )
+                }
+                else
+                {
+                    @Html.ActionLink(
+                        "Activate",
+                        "Activate",
+                        new { id = item.TeacherID }
+                    )
+                }
+            </td>
+        </tr>
+    }
+</table>

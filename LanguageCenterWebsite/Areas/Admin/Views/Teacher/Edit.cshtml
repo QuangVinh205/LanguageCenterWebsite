@@ -1,0 +1,29 @@
+﻿@model LanguageCenterWebsite.Models.Teacher
+
+<h2>Edit Teacher</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.TeacherID)
+
+    <div>
+        Full Name
+        @Html.TextBoxFor(m => m.fullName)
+    </div>
+
+    <div>
+        Expertise
+        @Html.TextBoxFor(m => m.expertise)
+    </div>
+
+    <div>
+        Bio
+        @Html.TextAreaFor(m => m.bio)
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Save
+    </button>
+}

@@ -1,0 +1,15 @@
+﻿@model LanguageCenterWebsite.Models.Program
+
+<h2>Delete Program</h2>
+
+<p>
+    Are you sure you want to delete
+    <strong>@Model.programName</strong>?
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ProgramID)
+
+    <input type="submit" value="Delete" />
+}
