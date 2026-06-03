@@ -1,0 +1,64 @@
+﻿@model LanguageCenterWebsite.Models.Student
+
+@{
+    ViewBag.Title = "Hồ sơ của tôi";
+}
+
+<div class="row" style="margin-top: 30px;">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Hồ sơ cá nhân</div>
+            <div class="panel-body">
+                @using (Html.BeginForm("UpdateProfile", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="text-center" style="margin-bottom: 20px;">
+                        @if (!string.IsNullOrEmpty(Model.avatar))
+                        {
+                            <img src="@Model.avatar" class="img-circle" style="width: 150px; height: 150px; object-fit: cover;" alt="Avatar" />
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/150" class="img-circle" alt="No Avatar" />
+                        }
+                        <br /><br />
+                        <input type="file" name="AvatarFile" class="form-control" style="display:inline-block; width:auto;" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mã học viên:</label>
+                        <input type="text" class="form-control" value="@Model.StudentID" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Họ và tên:</label>
+                        @Html.TextBoxFor(m => m.fullName, new { @class = "form-control" })
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Cập nhật hồ sơ</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">Gửi yêu cầu tư vấn</div>
+            <div class="panel-body">
+                @using (Html.BeginForm("ConsultationRequest", "Student", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label>Câu hỏi / Thắc mắc của bạn:</label>
+                        <textarea name="question" class="form-control" rows="4" placeholder="Nhập nội dung câu hỏi..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Thông tin liên hệ (SĐT / Email nhận phản hồi):</label>
+                        <input type="text" name="contactInfo" class="form-control" placeholder="Nhập số điện thoại hoặc email..." required />
+                    </div>
+
+                    <button type="submit" class="btn btn-info">Gửi yêu cầu</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
