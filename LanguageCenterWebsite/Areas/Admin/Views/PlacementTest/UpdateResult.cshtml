@@ -1,0 +1,16 @@
+﻿@model LanguageCenterWebsite.Models.PlacementTest
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.TestID)
+
+    <p>Score</p>
+    @Html.TextBoxFor(m => m.resultScore)
+
+    <p>Suggested Level</p>
+    @Html.TextBoxFor(m => m.suggestedLevel)
+
+    <button type="submit">
+        Save Result
+    </button>
+}

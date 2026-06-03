@@ -1,0 +1,49 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Areas.Admin.Models.PaymentViewModel>
+
+<h2>Payment List</h2>
+
+<table class="table">
+
+    <tr>
+        <th>Student</th>
+        <th>Class</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.StudentName</td>
+
+            <td>@item.ClassName</td>
+
+            <td>@item.amount</td>
+
+            <td>@item.paymentMethod</td>
+
+            <td>@item.paymentStatus</td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Confirm",
+                    "Confirm",
+                    new { id = item.PaymentID })
+
+                |
+
+                @Html.ActionLink(
+                    "Update Status",
+                    "UpdateStatus",
+                    new { id = item.PaymentID })
+
+            </td>
+
+        </tr>
+    }
+
+</table>

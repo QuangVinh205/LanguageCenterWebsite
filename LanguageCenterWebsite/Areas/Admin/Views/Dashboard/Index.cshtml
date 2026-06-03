@@ -1,7 +1,32 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿<h2>Dashboard</h2>
 
-<h2>Admin Dashboard</h2>
+<h3>Classes</h3>
 
+<p>Total Classes: @ViewBag.TotalClasses</p>
+<p>Active: @ViewBag.ActiveClasses</p>
+<p>Closed: @ViewBag.ClosedClasses</p>
+<p>Deleted: @ViewBag.DeletedClasses</p>
+
+<hr />
+
+<h3>Teachers</h3>
+
+<p>Total Teachers: @ViewBag.TotalTeachers</p>
+<p>Active: @ViewBag.ActiveTeachers</p>
+<p>Deactivate: @ViewBag.InactiveTeachers</p>
+
+<hr />
+
+<h3>Students</h3>
+
+<p>Total Students: @ViewBag.TotalStudents</p>
+<p>Active: @ViewBag.ActiveStudents</p>
+<p>Deactivate: @ViewBag.InactiveStudents</p>
+
+<hr />
+
+<h3>Revenue</h3>
+
+<p>
+    @String.Format("{0:N0}", ViewBag.TotalRevenue) VNĐ
+</p>

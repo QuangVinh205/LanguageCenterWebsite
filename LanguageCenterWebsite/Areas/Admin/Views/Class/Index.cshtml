@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Areas.Admin.Models.ClassViewModels>
+
+<h2>Class List</h2>
+
+<p>
+    @Html.ActionLink("Add Class", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Class</th>
+        <th>Program</th>
+        <th>Teacher</th>
+        <th>Status</th>
+        <th>Room</th>
+        <th>Max Students</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ClassName</td>
+            <td>@item.ProgramName</td>
+            <td>@item.TeacherName</td>
+            <td>@item.StatusName</td>
+            <td>@item.Room</td>
+            <td>@item.MaxStudents</td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit",
+                    new { id = item.ClassID })
+
+                @if (item.StatusName != "Deleted")
+                {
+                    @: |
+
+                    @Html.ActionLink("Delete", "Delete",
+                        new { id = item.ClassID })
+                }
+            </td>
+        </tr>
+    }
+</table>

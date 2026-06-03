@@ -1,0 +1,20 @@
+﻿@model LanguageCenterWebsite.Models.Payment
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.PaymentID)
+
+    <select name="paymentStatus">
+
+        <option>Pending</option>
+
+        <option>Paid</option>
+
+        <option>Failed</option>
+
+    </select>
+
+    <button type="submit">
+        Save
+    </button>
+}

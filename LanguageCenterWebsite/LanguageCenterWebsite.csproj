@@ -122,9 +122,19 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ClassController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PaymentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlacementTestController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProgramController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RegistrationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StudentController.cs" />
     <Compile Include="Areas\Admin\Controllers\TeacherController.cs" />
+    <Compile Include="Areas\Admin\Models\ClassViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\PaymentViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PlacementTestViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\RegistrationViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\StudentViewModel.cs" />
     <Compile Include="Areas\Admin\Models\TeacherViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -181,6 +191,22 @@
     <Content Include="Areas\Admin\Views\Teacher\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Deactivate.cshtml" />
     <Content Include="Areas\Admin\Views\Teacher\Activate.cshtml" />
+    <Content Include="Areas\Admin\Views\Student\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Student\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Student\Deactivate.cshtml" />
+    <Content Include="Areas\Admin\Views\Student\Activate.cshtml" />
+    <Content Include="Areas\Admin\Views\Class\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Class\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Class\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Class\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Registration\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Registration\UpdateStatus.cshtml" />
+    <Content Include="Areas\Admin\Views\Payment\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Payment\Confirm.cshtml" />
+    <Content Include="Areas\Admin\Views\Payment\UpdateStatus.cshtml" />
+    <Content Include="Areas\Admin\Views\PlacementTest\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\PlacementTest\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\PlacementTest\UpdateResult.cshtml" />
     <None Include="Models\LanguageDb.dbml.layout">
       <DependentUpon>LanguageDb.dbml</DependentUpon>
     </None>

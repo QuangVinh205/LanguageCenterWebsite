@@ -1,0 +1,17 @@
+﻿@model LanguageCenterWebsite.Models.Class
+
+<h2>Delete Class</h2>
+
+<p>
+    Are you sure you want to delete
+    <strong>@Model.className</strong> ?
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ClassID)
+
+    <button type="submit">
+        Delete
+    </button>
+}

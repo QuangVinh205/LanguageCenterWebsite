@@ -1,0 +1,27 @@
+﻿@model LanguageCenterWebsite.Models.PlacementTest
+
+@using (Html.BeginForm())
+{
+    <p>Student</p>
+    @Html.DropDownListFor(
+        m => m.studentID,
+        (SelectList)ViewBag.StudentID)
+
+    <p>Test Date</p>
+    @Html.TextBoxFor(
+        m => m.testDate,
+        "{0:yyyy-MM-dd}",
+        new { type = "date" })
+
+    <p>Test Time</p>
+    @Html.TextBoxFor(
+        m => m.testTime,
+        new { type = "time" })
+
+    <p>Requested Level</p>
+    @Html.TextBoxFor(m => m.levelRequested)
+
+    <button type="submit">
+        Create
+    </button>
+}

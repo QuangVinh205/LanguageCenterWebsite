@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Areas.Admin.Models.PlacementTestViewModel>
+
+<h2>Placement Test List</h2>
+
+<p>
+    @Html.ActionLink("Create Test Schedule", "Create")
+</p>
+
+<table class="table">
+
+    <tr>
+        <th>Student</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Requested Level</th>
+        <th>Suggested Level</th>
+        <th>Score</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.StudentName</td>
+
+            <td>@item.TestDate</td>
+
+            <td>@item.TestTime</td>
+
+            <td>@item.LevelRequested</td>
+
+            <td>@item.SuggestedLevel</td>
+
+            <td>@item.ResultScore</td>
+
+            <td>@item.Status</td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Edit Result",
+                    "UpdateResult",
+                    new { id = item.TestID })
+
+            </td>
+
+        </tr>
+    }
+
+</table>

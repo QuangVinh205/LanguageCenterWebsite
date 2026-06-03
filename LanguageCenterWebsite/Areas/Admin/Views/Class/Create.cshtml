@@ -1,0 +1,49 @@
+﻿@model LanguageCenterWebsite.Models.Class
+
+<h2>Create Class</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label>Class Name</label>
+        @Html.TextBoxFor(m => m.className)
+    </div>
+
+    <div>
+        <label>Program</label>
+        @Html.DropDownListFor(
+            m => m.programID,
+            (SelectList)ViewBag.ProgramID
+        )
+    </div>
+
+    <div>
+        <label>Teacher</label>
+        @Html.DropDownListFor(
+            m => m.teacherID,
+            (SelectList)ViewBag.TeacherID
+        )
+    </div>
+
+    <div>
+        <label>Status</label>
+        @Html.DropDownListFor(
+            m => m.statusID,
+            (SelectList)ViewBag.StatusID
+        )
+    </div>
+
+    <div>
+        <label>Room</label>
+        @Html.TextBoxFor(m => m.room)
+    </div>
+
+    <div>
+        <label>Max Students</label>
+        @Html.TextBoxFor(m => m.maxStudents)
+    </div>
+
+    <button type="submit">
+        Save
+    </button>
+}

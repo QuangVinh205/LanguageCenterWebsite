@@ -1,0 +1,15 @@
+﻿@model LanguageCenterWebsite.Models.Payment
+
+<h2>Confirm Payment</h2>
+
+<p>
+    Confirm payment
+    <strong>@Model.amount</strong> ?
+</p>
+
+@using (Html.BeginForm())
+{
+    <button type="submit">
+        Confirm
+    </button>
+}
