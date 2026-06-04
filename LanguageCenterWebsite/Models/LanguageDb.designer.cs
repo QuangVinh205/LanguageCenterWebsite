@@ -88,8 +88,15 @@ namespace LanguageCenterWebsite.Models
 		{
 			OnCreated();
 		}
-		
-		public System.Data.Linq.Table<Class> Classes
+
+        public LanguageDbDataContext() :
+         base(global::System.Configuration.ConfigurationManager.ConnectionStrings[
+         "LanguageWebConnectionString"].ConnectionString, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public System.Data.Linq.Table<Class> Classes
 		{
 			get
 			{
@@ -842,8 +849,10 @@ namespace LanguageCenterWebsite.Models
 				this._Classes.Assign(value);
 			}
 		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
+
+        public object ClassStatusID { get; internal set; }
+
+        public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		

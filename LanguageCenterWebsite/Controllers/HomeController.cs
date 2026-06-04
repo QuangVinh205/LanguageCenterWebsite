@@ -26,5 +26,10 @@ namespace LanguageCenterWebsite.Controllers
 
             return View();
         }
+
+        public ActionResult test()
+        {
+            return View();
+        }
     }
 }
