@@ -1,0 +1,28 @@
+﻿@model LanguageCenterWebsite.Models.Registration
+
+<h2>Cancel Registration</h2>
+
+<p>
+    Are you sure you want to cancel this registration?
+</p>
+
+<p>
+    Registration ID:
+    <strong>@Model.RegistrationID</strong>
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.RegistrationID)
+
+    <button type="submit"
+            class="btn btn-danger">
+        Cancel Registration
+    </button>
+
+    @Html.ActionLink(
+        "Back",
+        "Index",
+        null,
+        new { @class = "btn btn-secondary" })
+}

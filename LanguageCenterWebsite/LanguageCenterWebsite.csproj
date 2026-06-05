@@ -207,6 +207,7 @@
     <Content Include="Areas\Admin\Views\PlacementTest\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PlacementTest\Create.cshtml" />
     <Content Include="Areas\Admin\Views\PlacementTest\UpdateResult.cshtml" />
+    <Content Include="Areas\Admin\Views\Registration\Cancel.cshtml" />
     <None Include="Models\LanguageDb.dbml.layout">
       <DependentUpon>LanguageDb.dbml</DependentUpon>
     </None>

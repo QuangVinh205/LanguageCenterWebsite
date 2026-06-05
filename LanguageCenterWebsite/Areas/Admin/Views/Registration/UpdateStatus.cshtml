@@ -6,19 +6,35 @@
 {
     @Html.HiddenFor(m => m.RegistrationID)
 
-    <select name="status">
+    <p>Status</p>
 
-        <option>Pending</option>
+    <select name="status" class="form-control">
 
-        <option>Approved</option>
+        <option value="Pending"
+                @(Model.status == "Pending" ? "selected" : "")>
+            Pending
+        </option>
 
-        <option>Rejected</option>
+        <option value="Approved"
+                @(Model.status == "Approved" ? "selected" : "")>
+            Approved
+        </option>
 
-        <option>Cancelled</option>
+        <option value="Rejected"
+                @(Model.status == "Rejected" ? "selected" : "")>
+            Rejected
+        </option>
+
+        <option value="Cancelled"
+                @(Model.status == "Cancelled" ? "selected" : "")>
+            Cancelled
+        </option>
 
     </select>
 
-    <button type="submit">
+    <br />
+
+    <button type="submit" class="btn btn-primary">
         Save
     </button>
 }

@@ -1,9 +1,6 @@
 ﻿using LanguageCenterWebsite.Areas.Admin.Models;
 using LanguageCenterWebsite.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LanguageCenterWebsite.Areas.Admin.Controllers
@@ -11,7 +8,10 @@ namespace LanguageCenterWebsite.Areas.Admin.Controllers
     public class RegistrationController : Controller
     {
         LanguageDbDataContext db = new LanguageDbDataContext();
-        // GET: Admin/Registration
+
+        // ==========================
+        // Registration List
+        // ==========================
         public ActionResult Index()
         {
             var registrationList =
@@ -33,12 +33,15 @@ namespace LanguageCenterWebsite.Areas.Admin.Controllers
 
             return View(registrationList.ToList());
         }
-        public ActionResult UpdateStatus(int id)
+
+        // ==========================
+        // Details
+        // ==========================
+        public ActionResult Details(int id)
         {
             var registration =
                 db.Registrations
-                  .SingleOrDefault(r =>
-                        r.RegistrationID == id);
+                  .SingleOrDefault(r => r.RegistrationID == id);
 
             if (registration == null)
             {
@@ -47,32 +50,53 @@ namespace LanguageCenterWebsite.Areas.Admin.Controllers
 
             return View(registration);
         }
-        [HttpPost]
-        public ActionResult UpdateStatus(int id,string status)
+
+        // ==========================
+        // Update Status
+        // ==========================
+        public ActionResult UpdateStatus(int id)
         {
             var registration =
                 db.Registrations
-                  .SingleOrDefault(r =>
-                        r.RegistrationID == id);
+                  .SingleOrDefault(r => r.RegistrationID == id);
 
             if (registration == null)
             {
                 return HttpNotFound();
             }
 
-            registration.status = status;
+            return View(registration);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateStatus(Registration model)
+        {
+            var registration =
+                db.Registrations
+                  .SingleOrDefault(r =>
+                      r.RegistrationID == model.RegistrationID);
+
+            if (registration == null)
+            {
+                return HttpNotFound();
+            }
+
+            registration.status = model.status;
 
             db.SubmitChanges();
 
             return RedirectToAction("Index");
         }
 
+        // ==========================
+        // Cancel Registration
+        // ==========================
         public ActionResult Cancel(int id)
         {
             var registration =
                 db.Registrations
                   .SingleOrDefault(r =>
-                        r.RegistrationID == id);
+                      r.RegistrationID == id);
 
             if (registration == null)
             {
@@ -81,11 +105,15 @@ namespace LanguageCenterWebsite.Areas.Admin.Controllers
 
             return View(registration);
         }
+
         [HttpPost, ActionName("Cancel")]
         public ActionResult CancelConfirmed(int id)
         {
-            var registration = db.Registrations
-                  .SingleOrDefault(r => r.RegistrationID == id);
+            var registration =
+                db.Registrations
+                  .SingleOrDefault(r =>
+                      r.RegistrationID == id);
+
             if (registration == null)
             {
                 return HttpNotFound();

@@ -9,6 +9,7 @@
         <th>Level</th>
         <th>Fee</th>
         <th>Status</th>
+        <th>Actions</th>
     </tr>
 
     @foreach (var item in Model)
@@ -21,8 +22,7 @@
             <td>@item.Status</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ProgramID })
-            </td>
-            <td>
+                |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ProgramID })
             </td>
         </tr>

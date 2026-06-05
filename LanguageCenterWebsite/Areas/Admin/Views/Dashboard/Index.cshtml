@@ -1,32 +1,45 @@
-﻿<h2>Dashboard</h2>
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
 
-<h3>Classes</h3>
+<h2 class="mb-4">Dashboard</h2>
 
-<p>Total Classes: @ViewBag.TotalClasses</p>
-<p>Active: @ViewBag.ActiveClasses</p>
-<p>Closed: @ViewBag.ClosedClasses</p>
-<p>Deleted: @ViewBag.DeletedClasses</p>
+<div class="row">
 
-<hr />
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5>Total Students</h5>
+                <h2>@ViewBag.TotalStudents</h2>
+            </div>
+        </div>
+    </div>
 
-<h3>Teachers</h3>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5>Total Teachers</h5>
+                <h2>@ViewBag.TotalTeachers</h2>
+            </div>
+        </div>
+    </div>
 
-<p>Total Teachers: @ViewBag.TotalTeachers</p>
-<p>Active: @ViewBag.ActiveTeachers</p>
-<p>Deactivate: @ViewBag.InactiveTeachers</p>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5>Total Classes</h5>
+                <h2>@ViewBag.TotalClasses</h2>
+            </div>
+        </div>
+    </div>
 
-<hr />
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5>Total Registrations</h5>
+                <h2>@ViewBag.TotalRegistrations</h2>
+            </div>
+        </div>
+    </div>
 
-<h3>Students</h3>
-
-<p>Total Students: @ViewBag.TotalStudents</p>
-<p>Active: @ViewBag.ActiveStudents</p>
-<p>Deactivate: @ViewBag.InactiveStudents</p>
-
-<hr />
-
-<h3>Revenue</h3>
-
-<p>
-    @String.Format("{0:N0}", ViewBag.TotalRevenue) VNĐ
-</p>
+</div>
