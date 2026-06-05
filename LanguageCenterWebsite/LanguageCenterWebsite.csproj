@@ -293,12 +293,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClassMaterialViewModel.cs" />
     <Compile Include="Models\ClassStudentViewModel.cs" />
     <Compile Include="Models\LanguageDb.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LanguageDb.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlacementTestViewModel.cs" />
+    <Compile Include="Models\StudentFeedbackViewModel.cs" />
     <Compile Include="Models\TeacherClassViewModel.cs" />
     <Compile Include="Models\TeacherDashboardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -365,6 +368,9 @@
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\ClassStudents.cshtml" />
     <Content Include="Views\Teacher\MyClasses.cshtml" />
+    <Content Include="Views\Teacher\ManageMaterials.cshtml" />
+    <Content Include="Views\Teacher\PlacementTestResults.cshtml" />
+    <Content Include="Views\Teacher\StudentFeedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

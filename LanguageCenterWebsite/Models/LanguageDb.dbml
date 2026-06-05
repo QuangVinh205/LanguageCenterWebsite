@@ -10,6 +10,7 @@
       <Column Name="maxStudents" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Class_ClassSchedule" Member="ClassSchedules" ThisKey="ClassID" OtherKey="classID" Type="ClassSchedule" />
       <Association Name="Class_Registration" Member="Registrations" ThisKey="ClassID" OtherKey="classID" Type="Registration" />
+      <Association Name="Class_Material" Member="Materials" ThisKey="ClassID" OtherKey="classID" Type="Material" />
       <Association Name="ClassStatus_Class" Member="ClassStatus" ThisKey="statusID" OtherKey="StatusID" Type="ClassStatus" IsForeignKey="true" />
       <Association Name="Program_Class" Member="Program" ThisKey="programID" OtherKey="ProgramID" Type="Program" IsForeignKey="true" />
       <Association Name="Teacher_Class" Member="Teacher" ThisKey="teacherID" OtherKey="TeacherID" Type="Teacher" IsForeignKey="true" />
@@ -124,6 +125,17 @@
       <Column Name="status" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
       <Association Name="UserAccount_Student" Member="Students" ThisKey="UserID" OtherKey="userID" Type="Student" />
       <Association Name="UserAccount_Teacher" Member="Teachers" ThisKey="UserID" OtherKey="userID" Type="Teacher" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Material" Member="Materials">
+    <Type Name="Material">
+      <Column Name="MaterialID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="classID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="materialName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="documentPath" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="uploadDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Class_Material" Member="Class" ThisKey="classID" OtherKey="ClassID" Type="Class" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
