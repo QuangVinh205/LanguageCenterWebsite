@@ -1,0 +1,94 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Consultation>
+@{
+    ViewBag.Title = "Yêu cầu tư vấn";
+}
+
+<h2 style="margin-top:30px; color: #6f42c1; font-weight: bold;">Hỗ trợ & Tư vấn học viên</h2>
+<hr />
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert" style="border-radius: 6px;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="glyphicon glyphicon-ok-sign"></i> @TempData["Success"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-info" style="border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="panel-heading" style="font-weight: bold; background-color: #31b0d5; color: white;">
+                <i class="glyphicon glyphicon-comment"></i> Gửi yêu cầu tư vấn
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("ConsultationRequest", "Student", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label>Câu hỏi / Thắc mắc của bạn:</label>
+                        <textarea name="question" class="form-control" rows="4" placeholder="Nhập nội dung câu hỏi..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Thông tin liên hệ (SĐT / Email nhận phản hồi):</label>
+                        <input type="text" name="contactInfo" class="form-control" placeholder="Nhập số điện thoại hoặc email..." required />
+                    </div>
+
+                    <button type="submit" class="btn btn-info btn-block" style="font-weight: bold;">Gửi yêu cầu</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default" style="border-top: 4px solid #6f42c1; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="panel-heading" style="font-weight: bold; background-color: #f5f5f5;">
+                <i class="glyphicon glyphicon-list-alt"></i> Trạng thái câu hỏi của bạn
+            </div>
+            <div class="panel-body table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nội dung câu hỏi</th>
+                            <th>Thông tin liên hệ</th>
+                            <th class="text-center">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@item.question">
+                                        @item.question
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrEmpty(item.phone) ? item.email : item.phone)
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (item.requestStatus == "Replied" || item.requestStatus == "Đã trả lời")
+                                        {
+                                            <span class="label label-success" style="padding:4px 8px;">Đã phản hồi</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-warning" style="padding:4px 8px; background-color: #ffc107;">Đang chờ xử lý</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted" style="padding: 20px; font-style: italic;">Bạn chưa gửi câu hỏi tư vấn nào.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

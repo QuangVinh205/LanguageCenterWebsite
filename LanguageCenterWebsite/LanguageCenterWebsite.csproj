@@ -200,6 +200,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Student\MyProfile.cshtml" />
     <Content Include="Views\Student\MyClasses.cshtml" />
+    <Content Include="Views\Student\Payment.cshtml" />
+    <Content Include="Views\Student\PlacementTest.cshtml" />
+    <Content Include="Views\Student\Consultation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

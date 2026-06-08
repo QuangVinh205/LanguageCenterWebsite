@@ -11,25 +11,36 @@ namespace LanguageCenterWebsite.Controllers
     {
         private LanguageDbDataContext db = new LanguageDbDataContext();
 
+        // Hàm tiện ích lấy ID học viên từ Session
         private int GetCurrentStudentId() => Convert.ToInt32(Session["StudentId"]);
 
-        // 1/ View Profile
+        // ==========================================
+        // 1/ MY PROFILE (View, Update, Change Password, Upload Avatar)
+        // ==========================================
+
+        // [GET] Xem thông tin cá nhân
         public ActionResult MyProfile()
         {
             int studentId = GetCurrentStudentId();
             if (studentId == 0) return RedirectToAction("Login", "Account");
 
             var student = db.Students.FirstOrDefault(s => s.StudentID == studentId);
+            if (student == null) return RedirectToAction("Login", "Account");
+
             return View(student);
         }
 
-        // 1/ Update Profile + Upload Avatar
+        // [POST] Cập nhật thông tin + Upload Avatar
         [HttpPost]
         public ActionResult UpdateProfile(Student model, HttpPostedFileBase AvatarFile)
         {
             int studentId = GetCurrentStudentId();
-            var student = db.Students.FirstOrDefault(s => s.StudentID == studentId);
+            if (studentId == 0) return RedirectToAction("Login", "Account");
 
+            var student = db.Students.FirstOrDefault(s => s.StudentID == studentId);
+            if (student == null) return HttpNotFound();
+
+            // Xử lý Upload Avatar mẫu tím (Lưu vào thư mục ~/Content/)
             if (AvatarFile != null && AvatarFile.ContentLength > 0)
             {
                 string fileName = System.IO.Path.GetFileName(AvatarFile.FileName);
@@ -38,70 +49,152 @@ namespace LanguageCenterWebsite.Controllers
                 student.avatar = "/Content/" + fileName;
             }
 
-            student.fullName = model.fullName;
+            // Cập nhật họ tên (Nếu form có nhập)
+            if (!string.IsNullOrEmpty(model.fullName))
+            {
+                student.fullName = model.fullName;
+            }
+
             db.SubmitChanges();
             return RedirectToAction("MyProfile");
         }
 
-        // 2/ Register Class (Đăng ký lớp)
+        // [POST] Đổi mật khẩu (Bổ sung cho đủ yêu cầu mục 1)
+        [HttpPost]
+        public ActionResult ChangePassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            int studentId = GetCurrentStudentId();
+            if (studentId == 0) return RedirectToAction("Login", "Account");
+
+            var student = db.Students.FirstOrDefault(s => s.StudentID == studentId);
+            if (student == null) return HttpNotFound();
+
+            // Kiểm tra mật khẩu cũ (Giả định bạn lưu plain text hoặc khớp theo cách bạn mã hóa)
+            if (student.password != oldPassword)
+            {
+                TempData["Error"] = "Mật khẩu cũ không chính xác.";
+                return RedirectToAction("MyProfile");
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                TempData["Error"] = "Mật khẩu xác nhận không trùng khớp.";
+                return RedirectToAction("MyProfile");
+            }
+
+            student.password = newPassword; // Đổi mật khẩu mới
+            db.SubmitChanges();
+
+            TempData["Success"] = "Đổi mật khẩu thành công!";
+            return RedirectToAction("MyProfile");
+        }
+
+        // ==========================================
+        // 2/ REGISTER CLASS (Đăng ký lớp)
+        // ==========================================
         [HttpPost]
         public ActionResult RegisterClass(int classId)
         {
             int studentId = GetCurrentStudentId();
             if (studentId == 0) return RedirectToAction("Login", "Account");
 
-            Registration reg = new Registration { studentID = studentId, classID = classId, registrationDate = DateTime.Now, status = "Pending" };
+            // Kiểm tra xem đã đăng ký lớp này chưa để tránh trùng lặp dữ liệu
+            var existingReg = db.Registrations.FirstOrDefault(r => r.studentID == studentId && r.classID == classId);
+            if (existingReg != null)
+            {
+                TempData["Message"] = "Bạn đã đăng ký lớp học này rồi.";
+                return RedirectToAction("MyClasses");
+            }
+
+            Registration reg = new Registration
+            {
+                studentID = studentId,
+                classID = classId,
+                registrationDate = DateTime.Now,
+                status = "Pending"
+            };
+
             db.Registrations.InsertOnSubmit(reg);
             db.SubmitChanges();
 
             return RedirectToAction("MyClasses");
         }
 
-        // 3/ My Classes (Lớp học, Lịch học, Giáo viên)
+        // ==========================================
+        // 3/ MY CLASSES (Lớp học, Lịch học, Giáo viên)
+        // ==========================================
         public ActionResult MyClasses()
         {
             int studentId = GetCurrentStudentId();
+            if (studentId == 0) return RedirectToAction("Login", "Account"); // FIX: Thêm check login
+
             var myClasses = db.Registrations.Where(r => r.studentID == studentId).ToList();
             return View(myClasses);
         }
 
-        // 4/ Payment (Lịch sử đóng tiền)
+        // ==========================================
+        // 4/ PAYMENT (Lịch sử đóng tiền)
+        // ==========================================
         public ActionResult Payment()
         {
             int studentId = GetCurrentStudentId();
+            if (studentId == 0) return RedirectToAction("Login", "Account"); // FIX: Thêm check login
+
             var payments = db.Payments.Where(p => p.Registration.studentID == studentId).ToList();
             return View(payments);
         }
 
-        // 5/ Placement Test Registration (Thi xếp lớp)
+        // ==========================================
+        // 5/ PLACEMENT TEST REGISTRATION (Thi xếp lớp)
+        // ==========================================
         public ActionResult PlacementTest()
         {
             int studentId = GetCurrentStudentId();
+            if (studentId == 0) return RedirectToAction("Login", "Account"); // FIX: Thêm check login
+
             var tests = db.PlacementTests.Where(t => t.studentID == studentId).ToList();
             return View(tests);
         }
 
-        // 6/ Consultation Request (Gửi câu hỏi tư vấn)
+        // ==========================================
+        // 6/ CONSULTATION REQUEST (Gửi câu hỏi tư vấn - ĐÃ ĐỒNG BỘ KHÓA NGOẠI)
+        // ==========================================
+
+        // [GET] Điều hướng và hiển thị trang Tư vấn riêng độc lập
+        public ActionResult Consultation()
+        {
+            int studentId = GetCurrentStudentId();
+            if (studentId == 0) return RedirectToAction("Login", "Account");
+
+            // Lấy thông tin học viên hiện tại để lấy fullName làm chuẩn tìm kiếm
+            var currentStudent = db.Students.FirstOrDefault(s => s.StudentID == studentId);
+            if (currentStudent == null) return RedirectToAction("Login", "Account");
+
+            // GIẢI PHÁP TRIỆT ĐỂ: Lọc danh sách tư vấn theo fullName của học viên đang đăng nhập
+            // Cách này không thèm đụng vào trường StudentId lỗi nữa, né hoàn toàn lỗi unmapped
+            var requests = db.Consultations.Where(c => c.fullName == currentStudent.fullName).ToList();
+
+            return View(requests);
+        }
+
+        // [POST] Xử lý khi học viên bấm nút "Gửi yêu cầu" tư vấn độc lập
         [HttpPost]
         public ActionResult ConsultationRequest(string question, string contactInfo)
         {
             int studentId = GetCurrentStudentId();
             if (studentId == 0) return RedirectToAction("Login", "Account");
 
-            // 1. Lấy thông tin học viên để lấy ra fullName (bắt buộc trong DB của bạn)
             var student = db.Students.FirstOrDefault(s => s.StudentID == studentId);
             string studentName = student != null ? student.fullName : "Học viên ẩn danh";
 
-            // 2. Khởi tạo đối tượng Consultation với các trường dữ liệu của bạn
+            // Tạo đối tượng tư vấn mới và KHÔNG gán trường StudentId/studentID thô vào đây nữa
             var con = new Consultation
             {
-                StudentId = studentId,       // Hãy check lại nếu chữ s viết thường (studentID) theo chuẩn của bạn
-                fullName = studentName,      // THÊM DÒNG NÀY: Sửa lỗi chặn NULL từ SQL Server
+                fullName = studentName,
                 question = question,
-                requestStatus = "Pending"    // Trạng thái theo đúng thuộc tính bạn đặt
+                requestStatus = "Pending"
             };
 
-            // 3. Logic phân tách contactInfo thành email hoặc phone của bạn
             if (!string.IsNullOrWhiteSpace(contactInfo))
             {
                 if (contactInfo.Contains("@"))
@@ -112,7 +205,10 @@ namespace LanguageCenterWebsite.Controllers
 
             db.Consultations.InsertOnSubmit(con);
             db.SubmitChanges();
-            return RedirectToAction("MyProfile");
+
+            TempData["Success"] = "Gửi yêu cầu tư vấn thành công!";
+
+            return RedirectToAction("Consultation");
         }
     }
 }

@@ -3,34 +3,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Trung Tâm Ngoại Ngữ</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("LANGUAGE CENTER", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "font-weight:bold; color:#6f42c1;" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Đăng ký", "Register", "Account")</li>
-                    <li>@Html.ActionLink("Đăng nhập", "Login", "Account")</li>
+                    <li class="nav-item">@Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    @if (Session["Student"] != null || Session["User"] != null || Session["TaiKhoan"] != null || Session["StudentID"] != null)
+                    {
+                        <li class="nav-item">@Html.ActionLink("Hồ sơ cá nhân", "MyProfile", "Student", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Lớp của tôi", "MyClasses", "Student", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Gửi tư vấn", "Consultation", "Student", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Thanh toán", "Payment", "Student", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Thi xếp lớp", "PlacementTest", "Student", null, new { @class = "nav-link" })</li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">@Html.ActionLink("Về chúng tôi", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
                 </ul>
+
+                <ul class="navbar-nav">
+                    @if (Session["Student"] != null || Session["User"] != null || Session["TaiKhoan"] != null || Session["StudentID"] != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link" style="color: #6f42c1; font-weight: bold;">
+                                <i class="glyphicon glyphicon-user"></i> Xin chào, Hoàng!
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Đăng xuất", "Logout", "Account", null, new { @class = "nav-link", @style = "color: #dc3545; font-weight: bold;" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">@Html.ActionLink("Đăng ký", "Register", "Account", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item"><span class="nav-link" style="padding-left:0; padding-right:0; color:gray;">|</span></li>
+                        <li class="nav-item">@Html.ActionLink("Đăng nhập", "Login", "Account", null, new { @class = "nav-link", @style = "font-weight:bold; color:#6f42c1;" })</li>
+                    }
+                </ul>
+
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
+
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Vũ Khánh Hoàng - Đồ án Trung Tâm Ngoại Ngữ</p>
         </footer>
     </div>
 

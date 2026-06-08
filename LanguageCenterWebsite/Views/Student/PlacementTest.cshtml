@@ -1,0 +1,101 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.PlacementTest>
+@{
+    ViewBag.Title = "Đăng ký thi xếp lớp";
+}
+
+<h2 style="margin-top:30px; color: #6f42c1; font-weight: bold;">Thi xếp lớp đầu vào</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel" style="border-color: #6f42c1;">
+            <div class="panel-heading" style="background-color: #6f42c1; color: white; font-weight: bold;">Đăng ký lịch thi mới</div>
+            <div class="panel-body">
+
+                @using (Html.BeginForm("RegisterPlacementTest", "Student", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label>Chọn ngày thi:</label>
+                        <input type="date" name="testDate" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chọn ca thi (Giờ thi):</label>
+                        <select name="testTime" class="form-control" required>
+                            <option value="08:00">08:00 - Sáng</option>
+                            <option value="14:00">14:00 - Chiều</option>
+                            <option value="18:00">18:00 - Tối</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trình độ mong muốn thi:</label>
+                        <input type="text" name="level" class="form-control" placeholder="Ví dụ: Căn bản, IELTS, TOEIC..." required />
+                    </div>
+
+                    <button type="submit" class="btn" style="background-color: #6f42c1; color: white; width: 100%;">Gửi yêu cầu đăng ký</button>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="font-weight: bold;">Lịch sử và trạng thái đăng ký thi</div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr style="background-color: #f5f5f5;">
+                                <th>Mã lịch thi</th>
+                                <th>Ngày thi</th>
+                                <th>Giờ thi</th>
+                                <th>Trình độ</th>
+                                <th>Trạng thái / Kết quả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.TestID</td>
+
+                                        <td>
+                                            @(item.testDate != null ? Convert.ToDateTime(item.testDate).ToString("dd/MM/yyyy") : "N/A")
+                                        </td>
+
+                                        <td>@item.testTime</td>
+                                        <td>@item.suggestedLevel</td>
+                                        <td>
+                                            @if (item.status == "Pending" || string.IsNullOrEmpty(item.status))
+                                            {
+                                                <span class="label label-warning" style="padding: 5px 10px;">Chờ xếp phòng</span>
+                                            }
+                                            else if (item.status == "Approved" || item.status == "Active")
+                                            {
+                                                <span class="label label-success" style="padding: 5px 10px;">Đã xác nhận</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="label label-info" style="padding: 5px 10px;">@item.status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted" style="padding: 15px;">Bạn chưa đăng ký lịch thi xếp lớp nào.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
