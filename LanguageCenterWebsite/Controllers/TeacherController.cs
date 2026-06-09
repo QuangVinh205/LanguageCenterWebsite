@@ -12,13 +12,17 @@ namespace LanguageCenterWebsite.Controllers
     {
         private LanguageDbDataContext db = new LanguageDbDataContext();
 
-        // ==========================================
         // 1/ Dashboard
-        // ==========================================
+
         [HttpGet]
         public ActionResult Index()
         {
-            int teacherId = 1;
+            if (Session["TeacherID"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int teacherId = Convert.ToInt32(Session["TeacherID"]);
 
             var model = new TeacherDashboardViewModel();
             model.TotalClasses = db.Classes.Count(c => c.teacherID == teacherId);
@@ -57,9 +61,8 @@ namespace LanguageCenterWebsite.Controllers
             return View(model);
         }
 
-        // ==========================================
         // 2/ My Teaching Classes
-        // ==========================================
+
         [HttpGet]
         public ActionResult MyClasses()
         {
@@ -97,9 +100,8 @@ namespace LanguageCenterWebsite.Controllers
 
         }
 
-        // ==========================================
         // 3/ CLASS STUDENTS
-        // ==========================================
+
         [HttpGet]
         public ActionResult ClassStudents(int? classId)
         {
@@ -153,9 +155,7 @@ namespace LanguageCenterWebsite.Controllers
             // Bây giờ studentList đã tồn tại ở đây!
             return View(studentList);
         }
-        // ==========================================
         // 2.1/ ADD CLASS (Thêm lớp học mới - 1.0 Điểm)
-        // ==========================================
         [HttpGet]
         public ActionResult CreateClass()
         {
@@ -178,7 +178,7 @@ namespace LanguageCenterWebsite.Controllers
                 try
                 {
                     // Mặc định gán lớp này cho Giáo viên hiện tại (ID = 1)
-                    newClass.teacherID = 1;
+                    newClass.teacherID = Convert.ToInt32(Session["TeacherID"]);
 
                     db.Classes.InsertOnSubmit(newClass);
                     db.SubmitChanges(); // Lưu xuống SQL Server
@@ -195,24 +195,30 @@ namespace LanguageCenterWebsite.Controllers
 
             // Nếu lỗi, nạp lại dữ liệu cho các Dropdown công thức cũ
             ViewBag.statusID = new SelectList(db.ClassStatus, "statusID", "statusName", newClass.statusID);
-            ViewBag.ListPrograms = new SelectList(db.Programs, "ProgramID", "programName", newClass.programID);
-
+            ViewBag.programID = new SelectList(db.Programs, "ProgramID", "programName", newClass.programID);
             return View(newClass);
         }
 
-        // ==========================================
-        // 2.2/ EDIT CLASS (Sửa thông tin lớp - 1.0 Điểm)
-        // ==========================================
-        [HttpGet]
+        // ==========================================
+        // 2.2/ EDIT CLASS (Sửa thông tin lớp - 1.0 Điểm)
+        // ==========================================
+        [HttpGet]
         public ActionResult EditClass(int id)
         {
-            var editClass = db.Classes.FirstOrDefault(c => c.ClassID == id);
+            var editClass = db.Classes
+                              .FirstOrDefault(c => c.ClassID == id);
+
             if (editClass == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.statusID = new SelectList(db.ClassStatus, "statusID", "statusName", editClass.statusID);
+            ViewBag.StatusID = new SelectList(
+                db.ClassStatus,
+                "StatusID",
+                "statusName",
+                editClass.statusID);
+
             return View(editClass);
         }
 
@@ -220,39 +226,41 @@ namespace LanguageCenterWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditClass(Class updatedClass)
         {
-            if (ModelState.IsValid)
+            var existingClass = db.Classes
+                                  .FirstOrDefault(c => c.ClassID == updatedClass.ClassID);
+
+            if (existingClass == null)
             {
-                try
-                {
-                    var existingClass = db.Classes.FirstOrDefault(c => c.ClassID == updatedClass.ClassID);
-                    if (existingClass != null)
-                    {
-                        // Cập nhật các trường thông tin từ Form truyền lên
-                        existingClass.className = updatedClass.className;
-                        existingClass.room = updatedClass.room;
-                        existingClass.statusID = updatedClass.statusID;
-
-                        db.SubmitChanges(); // Cập nhật thay đổi xuống SQL Server
-
-                        TempData["Message"] = "Cập nhật thông tin lớp học thành công!";
-                        TempData["Status"] = "success";
-                        return RedirectToAction("MyClasses");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Lỗi khi cập nhật dữ liệu: " + ex.Message);
-                }
+                return HttpNotFound();
             }
 
-            ViewBag.statusID = new SelectList(db.ClassStatus, "statusID", "statusName", updatedClass.statusID);
+            try
+            {
+                existingClass.className = updatedClass.className;
+                existingClass.room = updatedClass.room;
+                existingClass.statusID = updatedClass.statusID;
+
+                db.SubmitChanges();
+
+                TempData["Message"] = "Update class successfully!";
+                return RedirectToAction("MyClasses");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            ViewBag.StatusID = new SelectList(
+                db.ClassStatus,
+                "StatusID",
+                "statusName",
+                updatedClass.statusID);
+
             return View(updatedClass);
         }
 
-        // ==========================================
-        // 2.3/ UPDATE STATUS (Đổi nhanh trạng thái lớp - 1.0 Điểm)
-        // ==========================================
-        public ActionResult ToggleStatus(int id)
+        // 2.3/ UPDATE STATUS (Đổi nhanh trạng thái lớp - 1.0 Điểm)
+        public ActionResult ToggleStatus(int id)
         {
             var targetClass = db.Classes.FirstOrDefault(c => c.ClassID == id);
             if (targetClass != null)
@@ -276,147 +284,155 @@ namespace LanguageCenterWebsite.Controllers
             return RedirectToAction("MyClasses");
         }
 
-        // ==========================================
-        // 2.4/ DELETE CLASS (Xóa lớp học - 1.0 Điểm)
-        // ==========================================
-        public ActionResult DeleteClass(int id)
+
+        // 2.4/ DELETE CLASS (Xóa lớp học - 1.0 Điểm)
+
+        public ActionResult DeleteClass(int id)
         {
             try
             {
-                var targetClass = db.Classes.FirstOrDefault(c => c.ClassID == id);
-                if (targetClass != null)
+                var targetClass =
+                    db.Classes.FirstOrDefault(c => c.ClassID == id);
+
+                if (targetClass == null)
                 {
-                    // Trước khi xóa lớp, cần kiểm tra và xử lý các dữ liệu ràng buộc (Khóa ngoại)
-                    // 1. Xóa lịch học liên quan của lớp này trước
-                    var relatedSchedules = db.ClassSchedules.Where(sch => sch.classID == id);
-                    db.ClassSchedules.DeleteAllOnSubmit(relatedSchedules);
-
-                    // 2. Xóa đăng ký học viên của lớp này trước (nếu có)
-                    var relatedRegistrations = db.Registrations.Where(r => r.classID == id);
-                    db.Registrations.DeleteAllOnSubmit(relatedRegistrations);
-
-                    // 3. Tiến hành xóa thực thể Lớp học chính
-                    db.Classes.DeleteOnSubmit(targetClass);
-                    db.SubmitChanges();
-
-                    TempData["Message"] = "Xóa lớp học hoàn tất!";
-                    TempData["Status"] = "success";
+                    return HttpNotFound();
                 }
+
+                targetClass.statusID = 4; // Deleted
+
+                db.SubmitChanges();
+
+                TempData["Message"] = "Class deleted successfully!";
+                TempData["Status"] = "success";
             }
             catch (Exception ex)
             {
-                TempData["Message"] = "Không thể xóa lớp này do vướng ràng buộc dữ liệu lớn: " + ex.Message;
+                TempData["Message"] = ex.Message;
                 TempData["Status"] = "danger";
             }
 
             return RedirectToAction("MyClasses");
         }
 
-        // ==========================================
-        // 4/ MANAGE CLASS MATERIALS (Lấy dữ liệu bảng Material chuẩn database)
-        // ==========================================
-        [HttpGet]
+
+        // 4/ MANAGE CLASS MATERIALS (Lấy dữ liệu bảng Material chuẩn database)
+
+        [HttpGet]
         public ActionResult ManageClassMaterials(int? classId)
         {
-            if (classId == null) return RedirectToAction("MyClasses");
+            if (classId == null)
+            {
+                return RedirectToAction("MyClasses");
+            }
 
-            // Lấy dữ liệu thật từ bảng db.Materials trong SQL Server
-            var materials = db.Materials
-               .Where(m => m.classID == classId)
-               .AsEnumerable()
-               .Select(m => new LanguageCenterWebsite.Models.ClassMaterial
-               {
-                   // Đổ dữ liệu từ cột thật trong DB sang ClassMaterial của View
-                   MaterialID = m.MaterialID.ToString(),
-                   ClassID = m.classID,
-                   FileName = m.materialName,    // Cột materialName trong SQL của bạn
-                   FilePath = m.documentPath,    // Cột documentPath trong SQL của bạn
-                   UploadDate = m.uploadDate.HasValue ? m.uploadDate.Value.ToString("dd/MM/yyyy") : "",
-                   FileSize = "N/A"              // Vì bảng của bạn không có cột dung lượng nên ta để mặc định
-               }).ToList();
+            var materials = db.Materials
+                              .Where(m => m.classID == classId.Value)
+                              .ToList()
+                              .Select(m => new ClassMaterial
+                              {
+                                  MaterialID = m.MaterialID.ToString(),
+                                  ClassID = m.classID,
+                                  FileName = m.materialName,
+                                  FilePath = m.documentPath,
+                                  UploadDate = m.uploadDate.HasValue
+                                                ? m.uploadDate.Value.ToString("dd/MM/yyyy")
+                                                : "",
+                                  FileSize = "N/A"
+                              })
+                              .ToList();
 
-            var currentClass = db.Classes.SingleOrDefault(c => c.ClassID == classId);
+            var currentClass = db.Classes
+                                 .SingleOrDefault(c => c.ClassID == classId.Value);
 
-            ViewBag.ClassID = classId;
-            ViewBag.ClassName = currentClass != null ? currentClass.className : "Lớp học";
+            ViewBag.ClassID = classId.Value;
+            ViewBag.ClassName = currentClass != null
+                                ? currentClass.className
+                                : "Unknown Class";
 
-            return View(materials); // Trả về danh sách dữ liệu thật cho View
-        }
+            return View(materials);
+        }
 
-        // ==========================================
-        // 5/ PLACEMENT TEST RESULTS
-        // ==========================================
-        [HttpGet]
+        // 5/ PLACEMENT TEST RESULTS
+
+        [HttpGet]
         public ActionResult PlacementTestResults()
         {
-            var rawTests = (from pt in db.PlacementTests
-                            join s in db.Students on pt.studentID equals s.StudentID
-                            select new { pt.TestID, s.fullName, pt.testDate, pt.suggestedLevel, pt.resultScore, pt.status }).AsEnumerable();
+            var testResults =
+                (from pt in db.PlacementTests
+                 join s in db.Students
+                 on pt.studentID equals s.StudentID
 
-            List<PlacementTestViewModel> testResults = (from pt in rawTests
-                                                        select new PlacementTestViewModel
-                                                        {
-                                                            TestID = pt.TestID,
-                                                            StudentName = pt.fullName,
-                                                            TestDate = pt.testDate != null ? pt.testDate.Value.ToString("dd/MM/yyyy") : "Chưa thi",
-                                                            SuggestedLevel = pt.suggestedLevel ?? "Chưa xếp",
-                                                            ResultScore = pt.resultScore != null ? (double)pt.resultScore.Value : 0.0,
-                                                            Status = pt.status ?? "Chưa rõ"
-                                                        }).ToList();
+                 select new PlacementTestViewModel
+                 {
+                     TestID = pt.TestID,
+                     StudentName = s.fullName,
+
+                     TestDate =
+                         pt.testDate.HasValue
+                         ? pt.testDate.Value.ToString("dd/MM/yyyy")
+                         : "Chưa thi",
+
+                     SuggestedLevel =
+                         string.IsNullOrEmpty(pt.suggestedLevel)
+                         ? "Chưa xếp"
+                         : pt.suggestedLevel,ResultScore = pt.resultScore.HasValue
+                                                         ? Convert.ToDouble(pt.resultScore.Value)
+                                                         : 0,Status = string.IsNullOrEmpty(pt.status) ? "Pending"
+                                                         : pt.status
+                 })
+                 .ToList();
 
             return View(testResults);
         }
-
-        // ==========================================
         // 6/ STUDENT FEEDBACK
-        // ==========================================
         public ActionResult StudentFeedback(string statusFilter)
-{
-    // Lấy toàn bộ dữ liệu từ DB
-    var rawData = db.Consultations.AsQueryable();
+        {
+            var consultations = db.Consultations.AsQueryable();
 
-    // Lọc theo trạng thái
-    if (!string.IsNullOrEmpty(statusFilter))
-    {
-        // So sánh trực tiếp với chuỗi tiếng Việt từ database
-        rawData = rawData.Where(c => c.requestStatus == statusFilter);
-    }
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                consultations = consultations
+                                .Where(c => c.requestStatus == statusFilter);
+            }
 
-    var list = rawData.OrderByDescending(c => c.ConsultationID).ToList();
+            var model = consultations
+                        .OrderByDescending(c => c.ConsultationID)
+                        .ToList()
+                        .Select(c => new StudentFeedbackViewModel
+                        {
+                            FeedbackID = c.ConsultationID,
+                            StudentName = c.fullName,
+                            FeedbackContent = c.question,
+                            FeedbackDate = new DateTime(),
+                            Status = c.requestStatus,
+                            Rating = 0
+                        })
+                        .ToList();
 
-    // Chuyển đổi sang ViewModel
-    var model = list.Select(c => new StudentFeedbackViewModel
-    {
-        FeedbackID = c.ConsultationID,
-        StudentName = c.fullName,
-        FeedbackContent = c.question,
-        FeedbackDate = DateTime.Now, // Hoặc trường ngày của bạn
-        Status = c.requestStatus,
-        Rating = 0 // Thay bằng trường đánh giá thực tế của bạn
-    }).ToList();
+            ViewBag.TotalFeedback = db.Consultations.Count();
+            ViewBag.PendingFeedback = db.Consultations.Count( c => c.requestStatus == "Chưa xử lý");
+            ViewBag.RepliedFeedback = db.Consultations.Count( c => c.requestStatus == "Đã liên hệ");
+            ViewBag.CurrentFilter = statusFilter;
+            return View(model);
+        }
 
-    // Thống kê (vẫn giữ nguyên trên toàn bộ dữ liệu)
-    ViewBag.TotalFeedback = db.Consultations.Count();
-    ViewBag.PendingFeedback = db.Consultations.Count(c => c.requestStatus == "Chưa xử lý");
-    ViewBag.RepliedFeedback = db.Consultations.Count(c => c.requestStatus == "Đã liên hệ");
-
-    return View(model);
-}
         [HttpGet]
         public ActionResult UpdateTeacherImage()
         {
-            int teacherId = 1; // ID giáo viên giả định để test
+            int teacherId = 1;
 
-            var teacher = db.Teachers.FirstOrDefault(t => t.TeacherID == teacherId);
+            var teacher =
+                db.Teachers.FirstOrDefault(
+                    t => t.TeacherID == teacherId);
+
             if (teacher == null)
             {
-                ViewBag.Message = "Không tìm thấy thông tin giáo viên trong hệ thống!";
-                return View();
+                return HttpNotFound();
             }
 
-            // Đọc đường dẫn ảnh từ Session (lưu trong thư mục mới Content/Img)
-            ViewBag.CurrentImg = Session["TeacherUploadedImg"] != null ? Session["TeacherUploadedImg"].ToString() : "";
             ViewBag.TeacherName = teacher.fullName;
+            ViewBag.CurrentImg = teacher.avatar;
 
             return View();
         }
@@ -425,61 +441,76 @@ namespace LanguageCenterWebsite.Controllers
         [HttpPost]
         public ActionResult UpdateTeacherImage(HttpPostedFileBase imageFile)
         {
-            int teacherId = 1; // ID giáo viên để test
-            var teacher = db.Teachers.FirstOrDefault(t => t.TeacherID == teacherId);
+            int teacherId = 1;
 
-            if (teacher != null && imageFile != null && imageFile.ContentLength > 0)
+            var teacher =
+                db.Teachers.FirstOrDefault(
+                    t => t.TeacherID == teacherId);
+
+            if (teacher == null)
             {
-                string extension = Path.GetExtension(imageFile.FileName).ToLower();
-                if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+                return HttpNotFound();
+            }
+
+            if (imageFile != null &&
+                imageFile.ContentLength > 0)
+            {
+                string extension =
+                    Path.GetExtension(imageFile.FileName)
+                        .ToLower();
+
+                if (extension == ".jpg" ||
+                    extension == ".jpeg" ||
+                    extension == ".png")
                 {
-                    try
+                    string newFileName =
+                        "teacher_" +
+                        teacherId + "_" +
+                        Guid.NewGuid()
+                            .ToString()
+                            .Substring(0, 8)
+                        + extension;
+
+                    string folderPath =
+                        Server.MapPath("~/Content/Img/");
+
+                    if (!Directory.Exists(folderPath))
                     {
-                        // 1. Tạo tên file mới duy nhất dựa trên ID giáo viên và mã ngẫu nhiên
-                        string newFileName = "teacher_" + teacherId + "_" + Guid.NewGuid().ToString().Substring(0, 8) + extension;
-
-                        // 2. SỬA ĐƯỜNG DẪN: Chỉ định lưu trực tiếp vào thư mục Content/Img
-                        string folderPath = Server.MapPath("~/Content/Img/");
-                        string path = Path.Combine(folderPath, newFileName);
-
-                        // Tự động tạo thư mục Img bên trong Content nếu ổ đĩa vật lý chưa kịp cập nhật
-                        if (!Directory.Exists(folderPath))
-                        {
-                            Directory.CreateDirectory(folderPath);
-                        }
-
-                        // 3. Tiến hành lưu file ảnh vật lý lên máy
-                        imageFile.SaveAs(path);
-
-                        // 4. CẬP NHẬT ĐƯỜNG DẪN URL MỚI: Lưu vào Session để hiển thị lên View
-                        string imgPathUrl = "/Content/Img/" + newFileName;
-                        Session["TeacherUploadedImg"] = imgPathUrl;
-
-                        ViewBag.Message = "Cập nhật ảnh chân dung giáo viên thành công!";
-                        ViewBag.Status = "success";
-                        ViewBag.CurrentImg = imgPathUrl; // Đồng bộ ảnh mới cho View hiển thị liền
-                    }
-                    catch (Exception ex)
-                    {
-                        ViewBag.Message = "Lỗi khi tải file: " + ex.Message;
-                        ViewBag.Status = "danger";
+                        Directory.CreateDirectory(folderPath);
                     }
+
+                    string fullPath =
+                        Path.Combine(
+                            folderPath,
+                            newFileName);
+
+                    imageFile.SaveAs(fullPath);
+
+                    string imgPath =
+                        "/Content/Img/" + newFileName;
+
+                    teacher.avatar = imgPath;
+
+                    db.SubmitChanges();
+
+                    ViewBag.Message =
+                        "Update image successfully";
+
+                    ViewBag.Status = "success";
                 }
                 else
                 {
-                    ViewBag.Message = "Vui lòng chỉ chọn file ảnh định dạng .jpg, .jpeg, hoặc .png!";
+                    ViewBag.Message =
+                        "Only JPG, JPEG, PNG";
+
                     ViewBag.Status = "warning";
                 }
             }
-            else
-            {
-                ViewBag.Message = "Vui lòng chọn một file ảnh chân dung trước khi bấm lưu!";
-                ViewBag.Status = "warning";
-            }
 
-            if (teacher != null) ViewBag.TeacherName = teacher.fullName;
+            ViewBag.TeacherName = teacher.fullName;
+            ViewBag.CurrentImg = teacher.avatar;
+
             return View();
         }
-
     }
 }
