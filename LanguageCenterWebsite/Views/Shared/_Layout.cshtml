@@ -74,12 +74,7 @@
 
         <div class="container">
 
-            @Html.ActionLink(
-                "LANGUAGE CENTER",
-                "Index",
-                "Home",
-                null,
-                new { @class = "navbar-brand" })
+            @Html.ActionLink("LANGUAGE CENTER", "Index","Home", new {area = ""}, new { @class = "navbar-brand" })
 
             <button class="navbar-toggler"
                     type="button"
@@ -95,23 +90,11 @@
 
                 <!-- LEFT MENU -->
                 <ul class="navbar-nav mr-auto">
-
                     <li class="nav-item">
-                        @Html.ActionLink(
-                            "Home",
-                            "Index",
-                            "Home",
-                            null,
-                            new { @class = "nav-link" })
+                        @Html.ActionLink("Home","Index", "Home", new { area = "" },new { @class = "nav-link" })
                     </li>
-
                     <li class="nav-item">
-                        @Html.ActionLink(
-                            "Programs",
-                            "ProgramList",
-                            "Home",
-                            null,
-                            new { @class = "nav-link" })
+                        @Html.ActionLink("Programs","ProgramList","Home", new { area = "" },new { @class = "nav-link" })
                     </li>
 
                     @if (Session["Role"] != null)
@@ -121,42 +104,30 @@
                         if (role == "Student")
                         {
                             <li class="nav-item">
-                                @Html.ActionLink("My Profile",
-                                    "MyProfile",
-                                    "Student",
-                                    null,
-                                    new { @class = "nav-link" })
+                                @Html.ActionLink("My Profile","MyProfile", "Student", new { area = "" },new { @class = "nav-link" })
                             </li>
 
                             <li class="nav-item">
                                 @Html.ActionLink("My Classes",
                                     "MyClasses",
                                     "Student",
-                                    null,
+                                    new { area = "" },
                                     new { @class = "nav-link" })
                             </li>
 
                             <li class="nav-item">
-                                @Html.ActionLink("Payment",
-                                    "Payment",
-                                    "Student",
-                                    null,
-                                    new { @class = "nav-link" })
+                                @Html.ActionLink("Payment", "Payment","Student", new { area = "" }, new { @class = "nav-link" })
                             </li>
 
                             <li class="nav-item">
-                                @Html.ActionLink("Placement Test",
-                                    "PlacementTest",
-                                    "Student",
-                                    null,
-                                    new { @class = "nav-link" })
+                                @Html.ActionLink("Placement Test","PlacementTest", "Student", new { area = "" }, new { @class = "nav-link" })
                             </li>
 
                             <li class="nav-item">
                                 @Html.ActionLink("Consultation",
                                     "Consultation",
                                     "Student",
-                                    null,
+                                    new { area = "" },
                                     new { @class = "nav-link" })
                             </li>
                         }
@@ -167,7 +138,7 @@
                                 @Html.ActionLink("Dashboard",
                                     "Index",
                                     "Teacher",
-                                    null,
+                                    new { area = "" },
                                     new { @class = "nav-link" })
                             </li>
 
@@ -175,7 +146,7 @@
                                 @Html.ActionLink("My Classes",
                                     "MyClasses",
                                     "Teacher",
-                                    null,
+                                    new { area = "" },
                                     new { @class = "nav-link" })
                             </li>
                         }

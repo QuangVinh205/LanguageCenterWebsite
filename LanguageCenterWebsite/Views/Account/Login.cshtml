@@ -1,51 +1,76 @@
 ﻿@model LanguageCenterWebsite.Models.LoginViewModel
+
 @{
     ViewBag.Title = "Login";
 }
 
-<div class="row" style="margin-top: 50px;">
+<div class="row" style="margin-top:60px;">
     <div class="col-md-4 col-md-offset-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><strong>User Login</strong></h3>
+
+        <div class="panel panel-primary" style="box-shadow:0 4px 15px rgba(0,0,0,0.15); border-radius:8px;">
+
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    <strong>Language Center Login</strong>
+                </h3>
             </div>
+
             <div class="panel-body">
+
                 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
+
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Email, "Email Address")
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email" })
+
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter email"
+                        })
+
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Login As</label>
-                        @Html.DropDownList("SelectedRole", new List<SelectListItem>
-                        {
-                            new SelectListItem { Text = "Student", Value = "Student" },
-                            new SelectListItem { Text = "Teacher", Value = "Teacher" }
-                        }, new { @class = "form-control" })
-                    </div>
-
-                    <div class="form-group">
                         @Html.LabelFor(m => m.Password, "Password")
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
+
+                        @Html.PasswordFor(m => m.Password, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter password"
+                        })
+
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="checkbox">
                         <label>
-                            @Html.CheckBoxFor(m => m.RememberMe) Remember Me
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            Remember Me
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-block">Login</button>
+                    <button type="submit"
+                            class="btn btn-primary btn-block">
+                        Login
+                    </button>
+
+                    <hr />
+
+                    <div class="text-center">
+                        <span>Don't have an account?</span>
+                        @Html.ActionLink("Register here", "Register", "Account")
+                    </div>
                 }
+
             </div>
+
         </div>
+
     </div>
 </div>
 

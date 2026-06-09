@@ -52,10 +52,6 @@ namespace LanguageCenterWebsite.Controllers
             }
         }
 
-        // ==========================================
-        // CHỨC NĂNG ĐĂNG KÝ (REGISTER)
-        // ==========================================
-
         // GET: Register
         public ActionResult Register() => View();
 
@@ -191,46 +187,59 @@ namespace LanguageCenterWebsite.Controllers
         // POST: Login (BƯỚC 3: Đồng bộ kiểm tra Role từ View và nạp FullName động vào Session)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModel model, string SelectedRole)
+        public ActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Kiểm tra đồng thời email, passwordHash VÀ trường role trong database phải khớp với SelectedRole người dùng chọn
-                var user = db.UserAccounts.FirstOrDefault(u => u.email == model.Email
-                                                            && u.passwordHash == model.Password
-                                                            && u.role == SelectedRole);
+                var user = db.UserAccounts.FirstOrDefault(u =>
+                    u.email == model.Email &&
+                    u.passwordHash == model.Password);
+
                 if (user != null)
                 {
-                    // Lưu các Session dùng chung cho hệ thống
                     Session["UserId"] = user.UserID;
                     Session["UserEmail"] = user.email;
                     Session["Role"] = user.role;
 
-                    // Rẽ nhánh điều hướng, cấp Session ID định danh riêng và lưu FullName động
                     if (user.role == "Student")
                     {
                         var student = db.Students.FirstOrDefault(s => s.userID == user.UserID);
+
                         if (student != null)
                         {
-                            Session["StudentId"] = student.StudentID;
-                            Session["FullName"] = student.fullName; // Hiển thị tên thật Student lên Navbar
+                            Session["StudentID"] = student.StudentID;
+                            Session["FullName"] = student.fullName;
                         }
+
                         return RedirectToAction("MyProfile", "Student");
                     }
                     else if (user.role == "Teacher")
                     {
                         var teacher = db.Teachers.FirstOrDefault(t => t.userID == user.UserID);
+
                         if (teacher != null)
                         {
-                            Session["TeacherId"] = teacher.TeacherID;
-                            Session["FullName"] = teacher.fullName; // Hiển thị tên thật Teacher lên Navbar
+                            Session["TeacherID"] = teacher.TeacherID;
+                            Session["FullName"] = teacher.fullName;
                         }
+
                         return RedirectToAction("Index", "Teacher");
+                    }
+                    else if (user.role == "Admin")
+                    {
+                        Session["FullName"] = "Admin";
+
+                        return RedirectToAction(
+                            "Index",
+                            "Dashboard",
+                            new { area = "Admin" }
+                        );
                     }
                 }
 
-                ModelState.AddModelError("", "Invalid email, password, or incorrect role selected.");
+                ModelState.AddModelError("", "Invalid email or password.");
             }
+
             return View(model);
         }
 
