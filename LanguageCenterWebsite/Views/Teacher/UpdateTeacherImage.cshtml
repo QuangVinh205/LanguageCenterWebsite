@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Cập nhật ảnh Giáo viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0" style="border-radius: 12px;">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h4 class="mb-0">📸 Hồ Sơ Ảnh Chân Dung</h4>
+                    <p class="mb-0 text-white-50">GV: @ViewBag.TeacherName</p>
+                </div>
+                <div class="card-body text-center p-4">
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-@ViewBag.Status py-2" style="font-size: 14px;">@ViewBag.Message</div>
+                    }
+
+                    <div class="mb-4">
+                        <label class="d-block text-muted mb-2 text-start font-weight-bold">Ảnh chân dung hiện tại:</label>
+                        @if (ViewBag.CurrentImg != null && !string.IsNullOrEmpty(ViewBag.CurrentImg.ToString()))
+                        {
+                            <img src="@ViewBag.CurrentImg" class="img-thumbnail shadow-sm" style="width: 180px; height: 230px; object-fit: cover; border-radius: 8px;" />
+                        }
+                        else
+                        {
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW2D68LAnWv3Z6PvxL0Z3p0nbyzC2V1n8SBA&s" class="img-thumbnail shadow-sm" style="width: 180px; height: 230px; object-fit: cover; border-radius: 8px;" />
+                        }
+                    </div>
+
+                    @using (Html.BeginForm("UpdateTeacherImage", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="mb-4">
+                            <input type="file" name="imageFile" class="form-control form-control-sm" accept="image/*" required />
+                            <small class="form-text text-muted text-start d-block mt-1">Chấp nhận định dạng: .jpg, .jpeg, .png</small>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("MyClasses", "Teacher")" class="btn btn-secondary btn-sm">Quay lại</a>
+                            <button type="submit" class="btn btn-primary btn-sm px-4">💾 Lưu ảnh chân dung</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

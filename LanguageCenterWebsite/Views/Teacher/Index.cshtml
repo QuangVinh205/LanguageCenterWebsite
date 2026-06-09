@@ -4,11 +4,29 @@
 }
 
 <div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto;">
-    <h2 style="color: #2c3e50;">1/ Teacher Dashboard</h2>
-    <p style="color: gray;">Chào mừng bạn quay trở lại hệ thống quản lý giảng dạy.</p>
-    <hr />
 
-    <!-- Khối thống kê nhanh (Widgets) -->
+    <div style="display: flex; align-items: center; background: #ffffff; padding: 15px 20px; border: 1px solid #e1e8ed; border-radius: 8px; margin-bottom: 20px; gap: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div style="position: relative;">
+            @if (Session["TeacherUploadedImg"] != null && !string.IsNullOrEmpty(Session["TeacherUploadedImg"].ToString()))
+            {
+                <img src="@Session["TeacherUploadedImg"]" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #3498db; box-shadow: 0 2px 5px rgba(0,0,0,0.15);" alt="Teacher Image" />
+            }
+            else
+            {
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW2D68LAnWv3Z6PvxL0Z3p0nbyzC2V1n8SBA&s" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #ccc;" alt="Default Image" />
+            }
+        </div>
+        <div>
+            <h2 style="color: #2c3e50; margin: 0 0 5px 0; font-size: 24px;">1/ Teacher Dashboard</h2>
+            <p style="color: gray; margin: 0 0 10px 0;">Chào mừng bạn quay trở lại hệ thống quản lý giảng dạy.</p>
+            <a href="@Url.Action("UpdateTeacherImage", "Teacher")" style="background: #ffffff; color: #34495e; border: 1px solid #bdc3c7; padding: 5px 12px; text-decoration: none; border-radius: 20px; display: inline-block; font-size: 13px; font-weight: bold; transition: all 0.2s;">
+                📸 Cập nhật ảnh thẻ
+            </a>
+        </div>
+    </div>
+
+    <hr style="border: 0; height: 1px; background: #eee; margin-bottom: 25px;" />
+
     <div style="display: flex; gap: 20px; margin-bottom: 30px;">
         <div style="flex: 1; background: #3498db; color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <h3 style="margin: 0; font-size: 16px; text-transform: uppercase;">Tổng số lớp dạy</h3>
@@ -21,7 +39,6 @@
     </div>
 
     <div style="display: flex; gap: 30px;">
-        <!-- Cột lịch dạy -->
         <div style="flex: 2; background: #fdfefe; padding: 20px; border: 1px solid #e1e8ed; border-radius: 8px;">
             <h3 style="color: #34495e; margin-top: 0; border-bottom: 2px solid #3498db; padding-bottom: 8px;">Lịch giảng dạy hiện tại</h3>
             <table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd; margin-top: 15px;">
@@ -55,14 +72,23 @@
                 </tbody>
             </table>
 
-            <p style="margin-top: 20px;">
-                <a href="@Url.Action("MyClasses", "Teacher")" style="background: #34495e; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
-                    Quản lý các lớp dạy →
-                </a>
-            </p>
+            <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="@Url.Action("MyClasses", "Teacher")" style="background: #34495e; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+                        Quản lý các lớp dạy 
+                    </a>
+
+                    <a href="@Url.Action("PlacementTestResults", "Teacher")" style="background: #2c3e50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+                        Placement Tests 
+                    </a>
+
+                    <a href="@Url.Action("StudentFeedback", "Teacher")" style="background: #16a085; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+                        Student Feedbacks 
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <!-- Cột hoạt động gần đây -->
         <div style="flex: 1; background: #fdfefe; padding: 20px; border: 1px solid #e1e8ed; border-radius: 8px;">
             <h3 style="color: #34495e; margin-top: 0; border-bottom: 2px solid #2ecc71; padding-bottom: 8px;">Hoạt động gần đây</h3>
             <ul style="list-style: none; padding-left: 0; margin-top: 15px;">

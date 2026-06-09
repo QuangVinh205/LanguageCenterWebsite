@@ -3,64 +3,80 @@
     ViewBag.Title = "View Class Students";
 }
 
-<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto;">
-    <h2 style="color: #2c3e50;">3/ View Class Students</h2>
-    <h4 style="color: #e74c3c; margin-top: 5px; background: #fdf2e9; padding: 10px 15px; display: inline-block; border-radius: 4px; border-left: 5px solid #e74c3c;">
-        Môn học/Lớp: @ViewBag.ClassName
-    </h4>
-    <hr />
+<div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 0 auto; color: #333;">
 
-    <table border="1" cellpadding="12" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd;">
-        <thead style="background: #27ae60; color: white;">
-            <tr>
-                <th>Student ID</th>
-                <th>Student Name (Họ tên)</th>
-                <th>Registration Date (Ngày đăng ký)</th>
-                <th>Payment Status (Học phí)</th>
-                <th>Attendance Status (Tình trạng)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Count > 0)
-            {
-                foreach (var s in Model)
+    <!-- TIÊU ĐỀ -->
+    <div style="margin-bottom: 25px;">
+        <h2 style="color: #2c3e50; margin-bottom: 5px;">View Class Students</h2>
+        <div style="background: #fdf2e9; padding: 10px 15px; border-left: 5px solid #e74c3c; display: inline-block; font-weight: bold; color: #c0392b;">
+            Lớp: @(ViewBag.ClassName ?? "Chưa có dữ liệu")
+        </div>
+    </div>
+
+    <!-- CHI TIẾT LỚP HỌC -->
+    <details style="margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+        <summary style="cursor: pointer; padding: 15px; background: #f9f9f9; font-weight: bold; color: #2980b9; outline: none;">
+            <i class="fa fa-info-circle"></i> Xem chi tiết thông tin lớp học
+        </summary>
+        <div style="padding: 20px; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #fff;">
+            <p><strong>Phòng học:</strong> @(ViewBag.Room ?? "N/A")</p>
+            <p><strong>Giảng viên:</strong> @(ViewBag.TeacherName ?? "N/A")</p>
+            <p><strong>Trạng thái:</strong> <span style="color: #27ae60; font-weight: bold;">@(ViewBag.Status ?? "Chưa rõ")</span></p>
+        </div>
+    </details>
+
+    <!-- BẢNG DANH SÁCH HỌC VIÊN -->
+    <div style="overflow-x: auto; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; background: #fff;">
+            <thead style="background: #27ae60; color: white;">
+                <tr>
+                    <th style="padding: 15px;">ID</th>
+                    <th style="padding: 15px;">Họ tên</th>
+                    <th style="padding: 15px;">Ngày đăng ký</th>
+                    <th style="padding: 15px;">Học phí</th>
+                    <th style="padding: 15px;">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">@item.StudentID</td>
+                            <td style="padding: 15px; border-bottom: 1px solid #eee;">@item.FullName</td>
+                            <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">@item.RegDate</td>
+                            <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">@item.PaymentStatus</td>
+                            <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">Có mặt</td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@s.StudentID</td>
-                        <td><strong style="color: #2c3e50;">@s.FullName</strong></td>
-                        <td>@s.RegDate</td>
-                        <td>
-                            @if (s.PaymentStatus == "Confirmed" || s.PaymentStatus == "Paid" || s.PaymentStatus == "Đã đóng tiền")
-                            {
-                                <span style="background: #eafaf1; color: #27ae60; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 1px solid #27ae60;">
-                                    Đã xác nhận thanh toán
-                                </span>
-                            }
-                            else
-                            {
-                                <span style="background: #fdedec; color: #e74c3c; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 1px solid #e74c3c;">
-                                    @s.PaymentStatus
-                                </span>
-                            }
-                        </td>
-                        <td>
-                            <span style="color: #34495e; font-weight: bold;">@s.AttendanceStatus</span>
+                        <td colspan="5" style="padding: 20px; text-align: center; color: #7f8c8d;">
+                            Chưa có học viên nào trong lớp này.
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" style="text-align: center; color: gray; padding: 25px;">
-                        Lớp học này hiện tại chưa ghi nhận học viên nào đăng ký thành công.
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 
-    <p style="margin-top: 25px;">
-        <a href="@Url.Action("ClassStudents", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold;">← Quay lại danh sách lớp học</a>
-    </p>
+    <!-- THÔNG TIN BỔ SUNG -->
+    <div style="padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background: #f8f9fa; border-top: 4px solid #3498db;">
+        <h3 style="margin-top: 0; color: #2c3e50; font-size: 18px;"><i class="fa fa-database"></i> 1.0 Related Information</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; font-size: 14px;">
+            <p><strong>Tổng số học viên:</strong> @(Model?.Count ?? 0) học viên</p>
+            <p><strong>Chương trình học:</strong> @(ViewBag.ProgramName ?? "N/A")</p>
+            <p><strong>Giảng viên phụ trách:</strong> @(ViewBag.TeacherName ?? "N/A")</p>
+            <p><strong>Ngày tạo lớp:</strong> @(ViewBag.CreatedDate ?? "N/A")</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="@Url.Action("MyClasses", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold;">
+            <i class="fa fa-arrow-left"></i> Quay lại danh sách lớp học
+        </a>
+    </div>
 </div>

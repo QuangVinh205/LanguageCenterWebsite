@@ -3,20 +3,46 @@
     ViewBag.Title = "My Teaching Classes";
 }
 
-<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto;">
-    <h2 style="color: #2c3e50;">2/ My Teaching Classes</h2>
-    <p style="color: gray;">Danh sách toàn bộ các lớp học do bạn chịu trách nhiệm giảng dạy và theo dõi.</p>
-    <hr />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-    <table border="1" cellpadding="12" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd;">
+<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1300px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div>
+            <h2 style="color: #2c3e50; margin: 0 0 5px 0;">2/ My Teaching Classes</h2>
+            <p style="color: gray; margin: 0;">Danh sách toàn bộ các lớp học do bạn chịu trách nhiệm giảng dạy và theo dõi.</p>
+        </div>
+        <!-- Nút Thêm Lớp Mới kết nối với CreateClass trong Controller -->
+        <a href="@Url.Action("CreateClass", "Teacher")"
+           style="background: #9b59b6; color: white; padding: 10px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; display: inline-block;">
+            <i class="fa fa-plus"></i> Thêm Lớp Học Mới
+        </a>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;" />
+
+    <!-- Khu vực hiển thị thông báo phản hồi (Alert) từ Controller -->
+    @if (TempData["Message"] != null)
+    {
+        string status = TempData["Status"]?.ToString() == "success" ? "#d4edda" : "#f8d7da";
+        string textColor = TempData["Status"]?.ToString() == "success" ? "#155724" : "#721c24";
+        string borderColor = TempData["Status"]?.ToString() == "success" ? "#c3e6cb" : "#f5c6cb";
+
+        <div style="padding: 12px 20px; background-color: @status; color: @textColor; border: 1px solid @borderColor; border-radius: 4px; margin-bottom: 20px; font-weight: bold;">
+            <i class="fa @(TempData["Status"]?.ToString() == "success" ? "fa-check-circle" : "fa-exclamation-circle")"></i> @TempData["Message"]
+        </div>
+    }
+
+    <!-- Bảng danh sách lớp học -->
+    <table border="1" cellpadding="12" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <thead style="background: #34495e; color: white;">
             <tr>
-                <th>Class ID</th>
+                <th style="width: 80px;">Class ID</th>
                 <th>Class Name (Tên lớp)</th>
                 <th>Schedule (Lịch học)</th>
-                <th>Room (Phòng)</th>
-                <th>Student Count (Sĩ số)</th>
-                <th>Class Status (Trạng thái)</th>
+                <th style="width: 100px;">Room (Phòng)</th>
+                <th style="width: 130px;">Student Count (Sĩ số)</th>
+                <th style="width: 150px;">Class Status (Trạng thái)</th>
+                <th style="text-align: center; width: 280px;">Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -35,21 +61,55 @@
                             </span>
                         </td>
                         <td>
-                            @if (c.Status == "Active" || c.Status == "Đang mở" || c.Status == "Đang dạy")
-                            {
-                                <span style="color: green; font-weight: bold;">● @c.Status</span>
-                            }
-                            else
-                            {
-                                <span style="color: #7f8c8d;">● @c.Status</span>
-                            }
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                @if (c.Status == "Active" || c.Status == "Đang mở" || c.Status == "Đang dạy" || c.Status == "Đang học" || c.Status == "Hoạt động")
+                                {
+                                    <span style="color: green; font-weight: bold;">● @c.Status</span>
+                                }
+                                else
+                                {
+                                    <span style="color: #7f8c8d; font-weight: bold;">● @c.Status</span>
+                                }
+                                <!-- Nút chuyển nhanh trạng thái nhanh bằng ToggleStatus -->
+                                <a href="@Url.Action("ToggleStatus", "Teacher", new { id = c.ClassID })"
+                                   title="Đổi trạng thái nhanh"
+                                   style="color: #7f8c8d; font-size: 14px; text-decoration: none; padding: 2px 6px; border: 1px solid #ccc; border-radius: 3px; background: #f9f9f9;">
+                                    <i class="fa fa-refresh"></i>
+                                </a>
+                            </div>
                         </td>
-                        <td>
-                            <!-- Chuyển hướng sang trang danh sách học sinh kèm theo mã ID lớp cụ thể -->
-                            <a href="@Url.Action("ClassStudents", "Teacher", new { classId = c.ClassID })"
-                               style="background: #2ecc71; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold; display: inline-block;">
-                                View Students
-                            </a>
+                        <td style="text-align: center;">
+                            <!-- Gom cụm nút hành động bằng Flexbox chia làm 2 nhóm rõ ràng -->
+                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center;">
+
+                                <!-- Hàng 1: Xem học viên & Tài liệu -->
+                                <div style="display: flex; gap: 6px;">
+                                    <a href="@Url.Action("ClassStudents", "Teacher", new { classId = c.ClassID })"
+                                       style="background: #2ecc71; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block; width: 115px; text-align: center;">
+                                        <i class="fa fa-users"></i> Students
+                                    </a>
+
+                                    <a href="@Url.Action("ManageClassMaterials", "Teacher", new { classId = c.ClassID })"
+                                       style="background: #3498db; color: white; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block; width: 115px; text-align: center;">
+                                        <i class="fa fa-folder-open"></i> Materials
+                                    </a>
+                                </div>
+
+                                <!-- Hàng 2: Sửa thông tin & Xóa lớp -->
+                                <div style="display: flex; gap: 6px;">
+                                    <a href="@Url.Action("EditClass", "Teacher", new { id = c.ClassID })"
+                                       style="background: #f1c40f; color: #2c3e50; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block; width: 115px; text-align: center;">
+                                        <i class="fa fa-pencil"></i> Sửa lớp
+                                    </a>
+
+                                    <a href="@Url.Action("DeleteClass", "Teacher", new { id = c.ClassID })"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa lớp học này cùng toàn bộ lịch học liên quan không? Thay đổi không thể hoàn tác!');"
+                                       style="background: #e74c3c; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block; width: 115px; text-align: center;">
+                                        <i class="fa fa-trash"></i> Xóa lớp
+                                    </a>
+                                </div>
+
+                            </div>
                         </td>
                     </tr>
                 }
@@ -57,13 +117,17 @@
             else
             {
                 <tr>
-                    <td colspan="7" style="text-align: center; color: gray; padding: 20px;">Bạn hiện tại không phụ trách lớp học nào.</td>
+                    <td colspan="7" style="text-align: center; color: gray; padding: 30px; font-size: 15px;">
+                        <i class="fa fa-info-circle" style="font-size: 18px;"></i> Bạn hiện tại không phụ trách lớp học nào.
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
     <p style="margin-top: 25px;">
-        <a href="@Url.Action("Index", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold;">← Quay lại trang Dashboard</a>
+        <a href="@Url.Action("Index", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold; display: inline-align; align-items: center; gap: 5px;">
+            <i class="fa fa-arrow-left"></i> Quay lại trang Dashboard
+        </a>
     </p>
 </div>

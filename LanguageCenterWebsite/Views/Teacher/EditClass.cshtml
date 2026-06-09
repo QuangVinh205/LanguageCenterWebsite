@@ -1,0 +1,47 @@
+﻿@model LanguageCenterWebsite.Models.Class
+@{
+    ViewBag.Title = "Chỉnh sửa lớp học";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #2c3e50;"><i class="fa fa-pencil-square-o"></i> Chỉnh sửa thông tin lớp</h2>
+    <p style="color: gray;">Cập nhật lại thông tin của lớp học hiện tại.</p>
+    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;" />
+
+    @using (Html.BeginForm("EditClass", "Teacher", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ClassID)
+
+        <div style="background: #f9f9f9; padding: 25px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+
+            @Html.ValidationSummary(true, "", new { @style = "color: red; font-weight: bold; margin-bottom: 15px;" })
+
+            <div style="margin-bottom: 18px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #34495e;">Tên lớp học:</label>
+                @Html.TextBoxFor(model => model.className, new { @style = "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" })
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #34495e;">Phòng học:</label>
+                @Html.TextBoxFor(model => model.room, new { @style = "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" })
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #34495e;">Trạng thái:</label>
+                @Html.DropDownList("statusID", null, new { @style = "width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: white;" })
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="submit" style="background: #f1c40f; color: #2c3e50; padding: 12px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; flex: 1; font-size: 14px;">
+                    <i class="fa fa-save"></i> Cập nhật
+                </button>
+                <a href="@Url.Action("MyClasses", "Teacher")" style="background: #7f8c8d; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; text-align: center; flex: 1; font-size: 14px;">
+                    <i class="fa fa-times"></i> Hủy
+                </a>
+            </div>
+        </div>
+    }
+</div>

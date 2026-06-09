@@ -1,0 +1,150 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.ClassMaterial>
+@{
+    ViewBag.Title = "Quản lý tài liệu lớp học";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Hoặc _Layout.cshtml tùy thuộc vào dự án của bạn
+    int classId = ViewBag.ClassID ?? 0;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary">Quản lý tài liệu lớp học</h2>
+            <h5 class="text-muted">Lớp: <span class="badge bg-info text-dark">@ViewBag.ClassName</span></h5>
+        </div>
+        <a href="@Url.Action("MyClasses", "Teacher")" class="btn btn-secondary">
+            <i class="fa fa-arrow-left"></i> Quay lại danh sách lớp
+        </a>
+    </div>
+
+    <hr />
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-@TempData["Status"] alert-dismissible fade show" role="alert">
+            <strong>Thông báo:</strong> @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0"><i class="fa fa-upload"></i> Tải lên tài liệu mới</h5>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadMaterial", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" name="classId" value="@classId" />
+
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Chọn tệp tin tài liệu:</label>
+                            <input type="file" name="fileData" class="form-control" required />
+                            <small class="text-muted">Hỗ trợ các file Slide, Word, Excel, PDF, ZIP...</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-cloud-upload"></i> Bắt đầu tải lên
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="card-title mb-0"><i class="fa fa-folder-open"></i> Danh sách tài liệu của lớp</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 5%">STT</th>
+                                    <th style="width: 45%">Tên tài liệu / Tệp tin</th>
+                                    <th style="width: 20%">Ngày tải lên</th>
+                                    <th style="width: 15%">Dung lượng</th>
+                                    <th style="width: 15%" class="text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    int index = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@(index++)</td>
+                                            <td>
+                                                <div class="fw-bold text-truncate" style="max-width: 300px;" id="text-name-@item.MaterialID">
+                                                    <i class="fa fa-file-text-o text-warning me-2"></i>@item.FileName
+                                                </div>
+
+                                                <div id="form-edit-@item.MaterialID" class="d-none mt-1">
+                                                    @using (Html.BeginForm("EditMaterial", "Teacher", FormMethod.Post, new { @class = "d-flex gap-1" }))
+                                                    {
+                                                        <input type="hidden" name="classId" value="@classId" />
+                                                        <input type="hidden" name="materialId" value="@item.MaterialID" />
+                                                        <input type="text" name="newFileName" value="@item.FileName" class="form-control form-control-sm" required />
+                                                        <button type="submit" class="btn btn-success btn-sm">Lưu</button>
+                                                        <button type="button" class="btn btn-secondary btn-sm" onclick="toggleEdit('@item.MaterialID', false)">Hủy</button>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@item.UploadDate</td>
+                                            <td><span class="badge bg-secondary">@item.FileSize</span></td>
+                                            <td class="text-center">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-outline-primary" title="Đổi tên file" onclick="toggleEdit('@item.MaterialID', true)">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <a href="@item.FilePath" class="btn btn-outline-info" download title="Tải xuống tệp">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteMaterial", "Teacher", new { classId = classId, materialId = item.MaterialID })"
+                                                       class="btn btn-outline-danger"
+                                                       title="Xóa tài liệu"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa tài liệu này không? Hành động này không thể hoàn tác.');">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <i class="fa fa-info-circle fa-2x mb-2 d-block"></i> Lớp học này chưa được tải lên tài liệu nào.
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function toggleEdit(id, isEditing) {
+        var textDiv = document.getElementById('text-name-' + id);
+        var formDiv = document.getElementById('form-edit-' + id);
+
+        if (isEditing) {
+            textDiv.classList.add('d-none');
+            formDiv.classList.remove('d-none');
+        } else {
+            textDiv.classList.remove('d-none');
+            formDiv.classList.add('d-none');
+        }
+    }
+</script>
