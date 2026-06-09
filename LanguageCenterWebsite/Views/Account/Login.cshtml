@@ -1,14 +1,13 @@
 ﻿@model LanguageCenterWebsite.Models.LoginViewModel
-
 @{
-    ViewBag.Title = "Đăng nhập";
+    ViewBag.Title = "Login";
 }
 
 <div class="row" style="margin-top: 50px;">
     <div class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><strong>Đăng nhập hệ thống</strong></h3>
+                <h3 class="panel-title"><strong>User Login</strong></h3>
             </div>
             <div class="panel-body">
                 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
@@ -17,24 +16,33 @@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Email)
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Nhập Email" })
+                        @Html.LabelFor(m => m.Email, "Email Address")
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Password)
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu" })
+                        <label class="control-label">Login As</label>
+                        @Html.DropDownList("SelectedRole", new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Student", Value = "Student" },
+                            new SelectListItem { Text = "Teacher", Value = "Teacher" }
+                        }, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, "Password")
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="checkbox">
                         <label>
-                            @Html.CheckBoxFor(m => m.RememberMe) Ghi nhớ đăng nhập
+                            @Html.CheckBoxFor(m => m.RememberMe) Remember Me
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-success btn-block">Đăng nhập</button>
+                    <button type="submit" class="btn btn-success btn-block">Login</button>
                 }
             </div>
         </div>

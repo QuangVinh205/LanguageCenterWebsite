@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Email Verification";
+}
+
+<div class="row justify-content-center" style="margin-top: 50px;">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default shadow" style="padding:30px; border: 1px solid #ddd; border-radius: 10px;">
+            <div class="text-center">
+                <h3 style="color: #6f42c1; font-weight: bold;">Email Verification</h3>
+                <p class="text-muted">We have sent a 6-digit code to your email. Please check your inbox (and spam folder).</p>
+            </div>
+            <hr />
+
+            @using (Html.BeginForm("VerifyOTP", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="text-danger" style="margin-bottom: 15px; text-align: center;">
+                    @Html.ValidationSummary(true, "")
+                </div>
+
+                <div class="form-group text-center">
+                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Enter Verification Code</label>
+                    <input type="text" name="enteredOTP" class="form-control text-center"
+                           placeholder="000000" maxlength="6" required
+                           style="font-size: 24px; font-weight: bold; letter-spacing: 8px; height: 50px;" />
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block"
+                        style="margin-top: 25px; width: 100%; font-weight: bold; height: 45px;">
+                    Verify and Complete Registration
+                </button>
+            }
+
+            <div class="text-center" style="margin-top: 20px;">
+                <p style="font-size: 13px; color: #888;">
+                    Didn't receive code? <a href="@Url.Action("Register", "Account")">Try registering again</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

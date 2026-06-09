@@ -1,45 +1,61 @@
 ﻿@model LanguageCenterWebsite.Models.RegisterViewModel
-
 @{
-    ViewBag.Title = "Đăng ký thành viên";
+    ViewBag.Title = "User Registration";
 }
 
-<h2>Đăng ký tài khoản mới</h2>
+<div class="row justify-content-center" style="margin-top: 50px;">
+    <div class="col-md-5">
+        <div class="panel panel-default shadow p-4" style="padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <h2 class="text-center" style="margin-top: 0; margin-bottom: 20px;">USER REGISTRATION</h2>
+            <hr />
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.FullName, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FullName, "Full Name", new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", placeholder = "Enter your full name" })
+                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px;">
+                        @Html.LabelFor(m => m.Email, "Email Address", new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", placeholder = "example@domain.com" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px;">
+                        @Html.LabelFor(m => m.Role, "Register As", new { @class = "control-label" })
+                        @Html.DropDownListFor(m => m.Role, new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Student", Value = "Student" },
+                            new SelectListItem { Text = "Teacher", Value = "Teacher" }
+                        }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px;">
+                        @Html.LabelFor(m => m.Password, "Password", new { @class = "control-label" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" style="margin-top: 10px;">
+                        @Html.LabelFor(m => m.ConfirmPassword, "Confirm Password", new { @class = "control-label" })
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Re-enter password" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-block" style="margin-top: 20px; width: 100%;">Register Now</button>
+                </div>
+            }
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-        </div>
-
-        <button type="submit" class="btn btn-primary">Đăng ký ngay</button>
     </div>
-}
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

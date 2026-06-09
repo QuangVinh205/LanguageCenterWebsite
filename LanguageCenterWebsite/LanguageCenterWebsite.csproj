@@ -203,6 +203,7 @@
     <Content Include="Views\Student\Payment.cshtml" />
     <Content Include="Views\Student\PlacementTest.cshtml" />
     <Content Include="Views\Student\Consultation.cshtml" />
+    <Content Include="Views\Account\VerifyOTP.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

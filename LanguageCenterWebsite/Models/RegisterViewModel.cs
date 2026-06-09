@@ -2,25 +2,32 @@
 
 namespace LanguageCenterWebsite.Models
 {
-    // Dùng cho Form Đăng ký (Guest)
+    // Used for the Registration Form (Guest)
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Vui lòng nhập họ tên")]
-        [Display(Name = "Họ và Tên")]
+        [Required(ErrorMessage = "Please enter your full name.")]
+        [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng nhập Email")]
-        [EmailAddress(ErrorMessage = "Email không đúng định dạng")]
+        [Required(ErrorMessage = "Please enter your email address.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        [Display(Name = "Email Address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
-        [StringLength(100, ErrorMessage = "{0} phải từ {2} ký tự trở lên.", MinimumLength = 6)]
+        // NEW: Field for selecting role (Student or Teacher)
+        [Required(ErrorMessage = "Please select a role.")]
+        [Display(Name = "Register As")]
+        public string Role { get; set; }
+
+        [Required(ErrorMessage = "Please enter your password.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Xác nhận mật khẩu")]
-        [Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 }
