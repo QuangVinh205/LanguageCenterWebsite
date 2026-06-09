@@ -1,0 +1,102 @@
+﻿@model List<LanguageCenterWebsite.Models.ClassMaterialViewModel>
+@{
+    ViewBag.Title = "Quản lý tài liệu lớp học";
+}
+
+<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto;">
+    <h2 style="color: #2c3e50;">4/ Manage Class Materials</h2>
+    <h4 style="color: #2980b9; margin-top: 5px; background: #ebf5fb; padding: 10px; display: inline-block; border-radius: 4px;">
+        Lớp học: @ViewBag.ClassName
+    </h4>
+    <hr />
+
+    <div style="display: flex; gap: 30px;">
+        <div style="flex: 1; background: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 8px; height: fit-content;">
+            <h3 style="margin-top: 0; color: #2c3e50; border-bottom: 2px solid #2980b9; padding-bottom: 5px;">Upload Tài Liệu Mới</h3>
+
+            @using (Html.BeginForm("AddMaterial", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" name="ClassID" value="@ViewBag.ClassID" />
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Tên tài liệu *</label>
+                    <input type="text" name="MaterialName" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: Slide Bài 1 - Grammar" />
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Mô tả chi tiết</label>
+                    <textarea name="Description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Tóm tắt nội dung tài liệu..."></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Chọn tài liệu đính kèm (Word, PDF, Image...)</label>
+                    <input type="file" name="uploadFile" required style="display: block;" />
+                </div>
+
+                <button type="submit" style="background: #2980b9; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%;">
+                    Tải Lên Hệ Thống (Upload)
+                </button>
+            }
+        </div>
+
+        <div style="flex: 2;">
+            <h3 style="margin-top: 0; color: #2c3e50;">Danh sách tài liệu đã đăng</h3>
+            <table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd;">
+                <thead style="background: #34495e; color: white;">
+                    <tr>
+                        <th>Tên tài liệu</th>
+                        <th>Mô tả</th>
+                        <th>Ngày đăng</th>
+                        <th>Tệp đính kèm</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var m in Model)
+                        {
+                            <tr>
+                                <td><strong style="color: #2c3e50;">@m.MaterialName</strong></td>
+                                <td style="font-size: 13px; color: #555;">@m.Description</td>
+                                <td>@m.UploadDate</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(m.DocumentPath))
+                                    {
+                                        <a href="@m.DocumentPath" target="_blank" style="color: #e67e22; font-weight: bold; text-decoration: none;">
+                                            📂 Tải về / Xem file
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: gray; font-style: italic;">Không có file</span>
+                                    }
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("DeleteMaterial", "Teacher", FormMethod.Post, new { onsubmit = "return confirm('Bạn có chắc chắn muốn xóa tài liệu này?');" }))
+                                    {
+                                        <input type="hidden" name="materialId" value="@m.MaterialID" />
+                                        <input type="hidden" name="classId" value="@m.ClassID" />
+                                        <button type="submit" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;">
+                                            Xóa
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: gray; padding: 20px;">Lớp học này chưa được upload tài liệu nào.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p style="margin-top: 30px;">
+        <a href="@Url.Action("MyClasses", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold;">← Quay lại danh sách lớp học</a>
+    </p>
+</div>

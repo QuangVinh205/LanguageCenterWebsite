@@ -54,5 +54,10 @@ namespace LanguageCenterWebsite.Controllers
             ViewBag.RelatedClasses = db.Classes.Where(c => c.programID == id).ToList();
             return View(program);
         }
+
+        public ActionResult test()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,66 @@
+﻿@model List<LanguageCenterWebsite.Models.ClassStudentViewModel>
+@{
+    ViewBag.Title = "View Class Students";
+}
+
+<div style="padding: 20px; font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto;">
+    <h2 style="color: #2c3e50;">3/ View Class Students</h2>
+    <h4 style="color: #e74c3c; margin-top: 5px; background: #fdf2e9; padding: 10px 15px; display: inline-block; border-radius: 4px; border-left: 5px solid #e74c3c;">
+        Môn học/Lớp: @ViewBag.ClassName
+    </h4>
+    <hr />
+
+    <table border="1" cellpadding="12" style="border-collapse: collapse; width: 100%; text-align: left; border: 1px solid #ddd;">
+        <thead style="background: #27ae60; color: white;">
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name (Họ tên)</th>
+                <th>Registration Date (Ngày đăng ký)</th>
+                <th>Payment Status (Học phí)</th>
+                <th>Attendance Status (Tình trạng)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.StudentID</td>
+                        <td><strong style="color: #2c3e50;">@s.FullName</strong></td>
+                        <td>@s.RegDate</td>
+                        <td>
+                            @if (s.PaymentStatus == "Confirmed" || s.PaymentStatus == "Paid" || s.PaymentStatus == "Đã đóng tiền")
+                            {
+                                <span style="background: #eafaf1; color: #27ae60; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 1px solid #27ae60;">
+                                    Đã xác nhận thanh toán
+                                </span>
+                            }
+                            else
+                            {
+                                <span style="background: #fdedec; color: #e74c3c; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; border: 1px solid #e74c3c;">
+                                    @s.PaymentStatus
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <span style="color: #34495e; font-weight: bold;">@s.AttendanceStatus</span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" style="text-align: center; color: gray; padding: 25px;">
+                        Lớp học này hiện tại chưa ghi nhận học viên nào đăng ký thành công.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p style="margin-top: 25px;">
+        <a href="@Url.Action("ClassStudents", "Teacher")" style="color: #3498db; text-decoration: none; font-weight: bold;">← Quay lại danh sách lớp học</a>
+    </p>
+</div>

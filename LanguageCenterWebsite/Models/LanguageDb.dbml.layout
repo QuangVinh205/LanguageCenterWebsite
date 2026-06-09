@@ -90,14 +90,14 @@
         <classShapeMoniker Id="e0d6149f-e21e-4197-b455-341b6dac1cbd" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 4.77628098993389); (5.81607443490112 : 5.09235542483501 : JumpStart); (5.93392556509888 : 5.21020655503277 : JumpEnd); (6.0625 : 5.33878098993389); (6.0625 : 5.1875); (6.25 : 5.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5.5 : 4.77628098993389); (6.0625 : 5.33878098993389); (6.0625 : 5.1875); (6.25 : 5.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LanguageDbDataContext/Student/Student_PlacementTest" />
       <nodes>
         <classShapeMoniker Id="be7394b6-5429-4c79-94cb-27c916fcc1a9" />
         <classShapeMoniker Id="10be5b98-0205-44fa-be30-4a11bbeaf72b" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 3.29169590494792); (6.25 : 3.29169590494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 3.29169590494792); (6.25 : 3.29169590494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LanguageDbDataContext/Student/Student_Registration" />
       <nodes>
         <classShapeMoniker Id="be7394b6-5429-4c79-94cb-27c916fcc1a9" />
@@ -118,7 +118,7 @@
         <classShapeMoniker Id="be7394b6-5429-4c79-94cb-27c916fcc1a9" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 5.94794840494792); (3.5 : 5.94794840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 5.94794840494792); (3.5 : 5.94794840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LanguageDbDataContext/UserAccount/UserAccount_Teacher" />
       <nodes>
         <classShapeMoniker Id="c8cdba84-05b8-4f27-82ad-d92c8e2ddfaa" />

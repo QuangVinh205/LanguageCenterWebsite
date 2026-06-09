@@ -91,8 +91,15 @@ namespace LanguageCenterWebsite.Models
 		{
 			OnCreated();
 		}
-		
-		public System.Data.Linq.Table<Class> Classes
+        public LanguageDbDataContext() :
+        base(global::System.Configuration.ConfigurationManager.ConnectionStrings[
+        "LanguageWebConnectionString"].ConnectionString, mappingSource)
+        {
+            OnCreated();
+        }
+
+
+        public System.Data.Linq.Table<Class> Classes
 		{
 			get
 			{
