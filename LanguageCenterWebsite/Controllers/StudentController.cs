@@ -88,10 +88,7 @@ namespace LanguageCenterWebsite.Controllers
             TempData["Success"] = "Đổi mật khẩu thành công!";
             return RedirectToAction("MyProfile");
         }
-
-        // ==========================================
         // 2/ REGISTER CLASS (Đăng ký lớp)
-        // ==========================================
         [HttpPost]
         public ActionResult RegisterClass(int classId)
         {
@@ -120,9 +117,7 @@ namespace LanguageCenterWebsite.Controllers
             return RedirectToAction("MyClasses");
         }
 
-        // ==========================================
         // 3/ MY CLASSES (Lớp học, Lịch học, Giáo viên)
-        // ==========================================
         public ActionResult MyClasses()
         {
             int studentId = GetCurrentStudentId();
@@ -132,9 +127,8 @@ namespace LanguageCenterWebsite.Controllers
             return View(myClasses);
         }
 
-        // ==========================================
         // 4/ PAYMENT (Lịch sử đóng tiền)
-        // ==========================================
+ 
         public ActionResult Payment()
         {
             int studentId = GetCurrentStudentId();
@@ -144,9 +138,7 @@ namespace LanguageCenterWebsite.Controllers
             return View(payments);
         }
 
-        // ==========================================
         // 5/ PLACEMENT TEST REGISTRATION (Thi xếp lớp)
-        // ==========================================
         public ActionResult PlacementTest()
         {
             int studentId = GetCurrentStudentId();
@@ -156,10 +148,7 @@ namespace LanguageCenterWebsite.Controllers
             return View(tests);
         }
 
-        // ==========================================
         // 6/ CONSULTATION REQUEST (Gửi câu hỏi tư vấn - ĐÃ ĐỒNG BỘ KHÓA NGOẠI)
-        // ==========================================
-
         // [GET] Điều hướng và hiển thị trang Tư vấn riêng độc lập
         public ActionResult Consultation()
         {

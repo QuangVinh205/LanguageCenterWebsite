@@ -1,0 +1,45 @@
+﻿@model LanguageCenterWebsite.Models.Program
+
+<h2>@Model.programName</h2>
+
+<p>
+    <strong>Level:</strong>
+    @Model.level
+</p>
+
+<p>
+    <strong>Duration:</strong>
+    @Model.duration
+</p>
+
+<p>
+    <strong>Description:</strong>
+    @Model.description
+</p>
+
+<h3>Related Classes</h3>
+
+<table class="table">
+
+    <tr>
+        <th>Class</th>
+        <th>Room</th>
+        <th>Max Students</th>
+    </tr>
+
+    @foreach (var item in ViewBag.RelatedClasses)
+    {
+        <tr>
+            <td>@item.className</td>
+            <td>@item.room</td>
+            <td>@item.maxStudents</td>
+        </tr>
+    }
+
+</table>
+
+<p>
+    @Html.ActionLink(
+        "Back to Programs",
+        "ProgramList")
+</p>

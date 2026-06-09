@@ -1,0 +1,127 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Program>
+
+@{
+    ViewBag.Title = "Programs";
+}
+
+<h2 class="text-center mb-4">Language Programs</h2>
+
+@using (Html.BeginForm("ProgramList", "Home", FormMethod.Get))
+{
+    <div class="row mb-4">
+
+        <div class="col-md-5">
+            <input type="text"
+                   name="searchString"
+                   value="@ViewBag.SearchString"
+                   class="form-control"
+                   placeholder="Search Program..." />
+        </div>
+
+        <div class="col-md-3">
+            <select name="levelFilter"
+                    class="form-control">
+
+                <option value="">All Levels</option>
+
+                <option value="Beginner"
+                        @(ViewBag.LevelFilter == "Beginner" ? "selected" : null)>
+                    Beginner
+                </option>
+
+                <option value="Intermediate"
+                        @(ViewBag.LevelFilter == "Intermediate" ? "selected" : null)>
+                    Intermediate
+                </option>
+
+                <option value="Advanced"
+                        @(ViewBag.LevelFilter == "Advanced" ? "selected" : null)>
+                    Advanced
+                </option>
+
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Search
+            </button>
+        </div>
+
+    </div>
+}
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h4 class="card-title text-primary">
+                        @item.programName
+                    </h4>
+
+                    <p>
+                        <strong>Level:</strong>
+                        @item.level
+                    </p>
+
+                    <p>
+                        <strong>Duration:</strong>
+                        @item.duration
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-white">
+
+                    <a href="@Url.Action(
+                                "ProgramDetail",
+                                new { id = item.ProgramID })"
+                       class="btn btn-outline-primary">
+                        View Detail
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<hr />
+
+<div class="text-center">
+
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        if (i == ViewBag.CurrentPage)
+        {
+            <span class="btn btn-primary">
+                @i
+            </span>
+        }
+        else
+        {
+            <a class="btn btn-outline-primary"
+               href="@Url.Action(
+                    "ProgramList",
+                    new
+                    {
+                        page = i,
+                        searchString = ViewBag.SearchString,
+                        levelFilter = ViewBag.LevelFilter
+                    })">
+                @i
+            </a>
+        }
+    }
+
+</div>

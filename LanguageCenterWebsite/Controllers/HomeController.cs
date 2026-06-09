@@ -18,18 +18,31 @@ namespace LanguageCenterWebsite.Controllers
             return View();
         }
 
-        // 2/ View Program List (Tìm kiếm, Lọc)
-        public ActionResult ProgramList(string searchString, string levelFilter)
+        // 2/ View Program List (Tìm kiếm, Lọc) Pagination
+        public ActionResult ProgramList(string searchString,string levelFilter,int page = 1)
         {
+            int pageSize = 6;
+
             var programs = db.Programs.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
-                programs = programs.Where(p => p.programName.Contains(searchString));
+            {
+                programs = programs.Where(
+                    p => p.programName.Contains(searchString));
+            }
 
             if (!string.IsNullOrEmpty(levelFilter))
-                programs = programs.Where(p => p.level == levelFilter);
+            {
+                programs = programs.Where(
+                    p => p.level == levelFilter);
+            }
 
-            return View(programs.ToList());
+            var result = programs
+                            .Skip((page - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToList();
+
+            return View(result);
         }
 
         // 3/ View Program Detail (Chi tiết và Lớp liên quan)
