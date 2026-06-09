@@ -886,183 +886,185 @@ namespace LanguageCenterWebsite.Models
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Consultation")]
 	public partial class Consultation : INotifyPropertyChanging, INotifyPropertyChanged
 	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ConsultationID;
-		
-		private string _fullName;
-		
-		private string _email;
-		
-		private string _phone;
-		
-		private string _question;
-		
-		private string _requestStatus;
-		
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _ConsultationID;
+	
+	private string _fullName;
+	
+	private string _email;
+	
+	private string _phone;
+	
+	private string _question;
+	
+	private string _requestStatus;
+    internal int StudentId;
+    internal string Question;
+
     #region Extensibility Method Definitions
     partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnConsultationIDChanging(int value);
-    partial void OnConsultationIDChanged();
-    partial void OnfullNameChanging(string value);
-    partial void OnfullNameChanged();
-    partial void OnemailChanging(string value);
-    partial void OnemailChanged();
-    partial void OnphoneChanging(string value);
-    partial void OnphoneChanged();
-    partial void OnquestionChanging(string value);
-    partial void OnquestionChanged();
-    partial void OnrequestStatusChanging(string value);
-    partial void OnrequestStatusChanged();
+partial void OnValidate(System.Data.Linq.ChangeAction action);
+partial void OnCreated();
+partial void OnConsultationIDChanging(int value);
+partial void OnConsultationIDChanged();
+partial void OnfullNameChanging(string value);
+partial void OnfullNameChanged();
+partial void OnemailChanging(string value);
+partial void OnemailChanged();
+partial void OnphoneChanging(string value);
+partial void OnphoneChanged();
+partial void OnquestionChanging(string value);
+partial void OnquestionChanged();
+partial void OnrequestStatusChanging(string value);
+partial void OnrequestStatusChanged();
     #endregion
-		
-		public Consultation()
+	
+	public Consultation()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsultationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int ConsultationID
+	{
+		get
 		{
-			OnCreated();
+			return this._ConsultationID;
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsultationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ConsultationID
+		set
 		{
-			get
+			if ((this._ConsultationID != value))
 			{
-				return this._ConsultationID;
-			}
-			set
-			{
-				if ((this._ConsultationID != value))
-				{
-					this.OnConsultationIDChanging(value);
-					this.SendPropertyChanging();
-					this._ConsultationID = value;
-					this.SendPropertyChanged("ConsultationID");
-					this.OnConsultationIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string fullName
-		{
-			get
-			{
-				return this._fullName;
-			}
-			set
-			{
-				if ((this._fullName != value))
-				{
-					this.OnfullNameChanging(value);
-					this.SendPropertyChanging();
-					this._fullName = value;
-					this.SendPropertyChanged("fullName");
-					this.OnfullNameChanged();
-				}
+				this.OnConsultationIDChanging(value);
+				this.SendPropertyChanging();
+				this._ConsultationID = value;
+				this.SendPropertyChanged("ConsultationID");
+				this.OnConsultationIDChanged();
 			}
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="VarChar(100)")]
-		public string email
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+	public string fullName
+	{
+		get
 		{
-			get
+			return this._fullName;
+		}
+		set
+		{
+			if ((this._fullName != value))
 			{
-				return this._email;
-			}
-			set
-			{
-				if ((this._email != value))
-				{
-					this.OnemailChanging(value);
-					this.SendPropertyChanging();
-					this._email = value;
-					this.SendPropertyChanged("email");
-					this.OnemailChanged();
-				}
+				this.OnfullNameChanging(value);
+				this.SendPropertyChanging();
+				this._fullName = value;
+				this.SendPropertyChanged("fullName");
+				this.OnfullNameChanged();
 			}
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_phone", DbType="VarChar(20)")]
-		public string phone
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="VarChar(100)")]
+	public string email
+	{
+		get
 		{
-			get
+			return this._email;
+		}
+		set
+		{
+			if ((this._email != value))
 			{
-				return this._phone;
-			}
-			set
-			{
-				if ((this._phone != value))
-				{
-					this.OnphoneChanging(value);
-					this.SendPropertyChanging();
-					this._phone = value;
-					this.SendPropertyChanged("phone");
-					this.OnphoneChanged();
-				}
+				this.OnemailChanging(value);
+				this.SendPropertyChanging();
+				this._email = value;
+				this.SendPropertyChanged("email");
+				this.OnemailChanged();
 			}
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_question", DbType="NVarChar(MAX)")]
-		public string question
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_phone", DbType="VarChar(20)")]
+	public string phone
+	{
+		get
 		{
-			get
+			return this._phone;
+		}
+		set
+		{
+			if ((this._phone != value))
 			{
-				return this._question;
-			}
-			set
-			{
-				if ((this._question != value))
-				{
-					this.OnquestionChanging(value);
-					this.SendPropertyChanging();
-					this._question = value;
-					this.SendPropertyChanged("question");
-					this.OnquestionChanged();
-				}
+				this.OnphoneChanging(value);
+				this.SendPropertyChanging();
+				this._phone = value;
+				this.SendPropertyChanged("phone");
+				this.OnphoneChanged();
 			}
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_requestStatus", DbType="VarChar(20)")]
-		public string requestStatus
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_question", DbType="NVarChar(MAX)")]
+	public string question
+	{
+		get
 		{
-			get
+			return this._question;
+		}
+		set
+		{
+			if ((this._question != value))
 			{
-				return this._requestStatus;
-			}
-			set
-			{
-				if ((this._requestStatus != value))
-				{
-					this.OnrequestStatusChanging(value);
-					this.SendPropertyChanging();
-					this._requestStatus = value;
-					this.SendPropertyChanged("requestStatus");
-					this.OnrequestStatusChanged();
-				}
+				this.OnquestionChanging(value);
+				this.SendPropertyChanging();
+				this._question = value;
+				this.SendPropertyChanged("question");
+				this.OnquestionChanged();
 			}
 		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_requestStatus", DbType="VarChar(20)")]
+	public string requestStatus
+	{
+		get
 		{
-			if ((this.PropertyChanging != null))
+			return this._requestStatus;
+		}
+		set
+		{
+			if ((this._requestStatus != value))
 			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
+				this.OnrequestStatusChanging(value);
+				this.SendPropertyChanging();
+				this._requestStatus = value;
+				this.SendPropertyChanged("requestStatus");
+				this.OnrequestStatusChanged();
 			}
 		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
 		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			this.PropertyChanging(this, emptyChangingEventArgs);
 		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Payment")]
@@ -2060,8 +2062,10 @@ namespace LanguageCenterWebsite.Models
 				}
 			}
 		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
+
+        public string password { get; internal set; }
+
+        public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		

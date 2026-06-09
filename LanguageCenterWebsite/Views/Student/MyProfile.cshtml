@@ -1,0 +1,81 @@
+﻿@model LanguageCenterWebsite.Models.Student
+@{
+    ViewBag.Title = "Hồ sơ của tôi";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success" style="margin-top: 20px;">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger" style="margin-top: 20px;">@TempData["Error"]</div>
+}
+
+<div class="row" style="margin-top: 30px;">
+    <div class="col-md-6">
+        <div class="panel" style="border-color: #6f42c1; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="panel-heading" style="background-color: #6f42c1; color: white; font-weight: bold;">
+                <i class="glyphicon glyphicon-user"></i> Hồ sơ cá nhân
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("UpdateProfile", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="text-center" style="margin-bottom: 20px;">
+                        @if (Model != null && !string.IsNullOrEmpty(Model.avatar))
+                        {
+                            <img src="@Model.avatar" class="img-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #6f42c1;" alt="Avatar" />
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/150" class="img-circle" style="border: 3px solid #6f42c1;" alt="No Avatar" />
+                        }
+                        <br /><br />
+                        <input type="file" name="AvatarFile" class="form-control" style="display:inline-block; width:auto;" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mã học viên:</label>
+                        <input type="text" class="form-control" value="@Model.StudentID" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Họ và tên:</label>
+                        @Html.TextBoxFor(m => m.fullName, new { @class = "form-control" })
+                    </div>
+
+                    <button type="submit" class="btn btn-block" style="background-color: #6f42c1; color: white; font-weight: bold;">Cập nhật hồ sơ</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-warning" style="border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <div class="panel-heading" style="font-weight: bold; background-color: #f0ad4e; color: white;">
+                <i class="glyphicon glyphicon-lock"></i> Đổi mật khẩu
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("ChangePassword", "Student", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label>Mật khẩu cũ:</label>
+                        <input type="password" name="oldPassword" class="form-control" placeholder="Nhập mật khẩu cũ" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mật khẩu mới:</label>
+                        <input type="password" name="newPassword" class="form-control" placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Xác nhận mật khẩu mới:</label>
+                        <input type="password" name="confirmPassword" class="form-control" placeholder="Nhập lại mật khẩu mới" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-warning btn-block" style="font-weight: bold;">Đổi mật khẩu</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

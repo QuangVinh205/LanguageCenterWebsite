@@ -3,39 +3,347 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    <title>@ViewBag.Title - Language Center</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        body {
+            background-color: #f4f7fc;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            background: linear-gradient(135deg,#0d6efd,#0dcaf0);
+            box-shadow: 0 2px 10px rgba(0,0,0,.15);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 24px;
+            color: white !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            margin-right: 8px;
+            transition: .3s;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ffe082 !important;
+            }
+
+        /* CONTENT */
+        .body-content {
+            min-height: 80vh;
+            padding-top: 30px;
+        }
+
+        /* FOOTER */
+        .footer-custom {
+            background: #1e293b;
+            color: white;
+            margin-top: 50px;
+            padding: 30px 0;
+        }
+
+            .footer-custom h5 {
+                color: #60a5fa;
+                font-weight: bold;
+            }
+
+            .footer-custom p {
+                margin-bottom: 5px;
+            }
+
+        /* USER */
+        .hello-user {
+            color: #ffe082 !important;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+
         <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+
+            @Html.ActionLink(
+                "LANGUAGE CENTER",
+                "Index",
+                "Home",
+                null,
+                new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#mainMenu">
+
                 <span class="navbar-toggler-icon"></span>
+
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Register", "Register", "Account")</li>
-                    <li>@Html.ActionLink("Login", "Login", "Account")</li>
+
+            <div class="collapse navbar-collapse"
+                 id="mainMenu">
+
+                <!-- LEFT MENU -->
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                            "Home",
+                            "Index",
+                            "Home",
+                            null,
+                            new { @class = "nav-link" })
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink(
+                            "Programs",
+                            "ProgramList",
+                            "Home",
+                            null,
+                            new { @class = "nav-link" })
+                    </li>
+
+                    @if (Session["Role"] != null)
+                    {
+                        string role = Session["Role"].ToString();
+
+                        if (role == "Student")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("My Profile",
+                                    "MyProfile",
+                                    "Student",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("My Classes",
+                                    "MyClasses",
+                                    "Student",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Payment",
+                                    "Payment",
+                                    "Student",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Placement Test",
+                                    "PlacementTest",
+                                    "Student",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Consultation",
+                                    "Consultation",
+                                    "Student",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+                        }
+
+                        else if (role == "Teacher")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Dashboard",
+                                    "Index",
+                                    "Teacher",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("My Classes",
+                                    "MyClasses",
+                                    "Teacher",
+                                    null,
+                                    new { @class = "nav-link" })
+                            </li>
+                        }
+
+                        else if (role == "Admin")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Dashboard",
+                                    "Index",
+                                    "Dashboard",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Programs",
+                                    "Index",
+                                    "Program",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Teachers",
+                                    "Index",
+                                    "Teacher",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Students",
+                                    "Index",
+                                    "Student",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Classes",
+                                    "Index",
+                                    "Class",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+
+                            <li class="nav-item">
+                                @Html.ActionLink("Registrations",
+                                    "Index",
+                                    "Registration",
+                                    new { area = "Admin" },
+                                    new { @class = "nav-link" })
+                            </li>
+                        }
+                    }
+
                 </ul>
+
+                <!-- RIGHT MENU -->
+                <ul class="navbar-nav">
+
+                    @if (Session["UserId"] != null)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link hello-user">
+                                Hello,
+                                @(Session["FullName"] ??
+                                  Session["UserEmail"])
+                            </span>
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Logout",
+                                "Logout",
+                                "Account",
+                                null,
+                                new { @class = "nav-link" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Register",
+                                "Register",
+                                "Account",
+                                null,
+                                new { @class = "nav-link" })
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Login",
+                                "Login",
+                                "Account",
+                                null,
+                                new { @class = "nav-link" })
+                        </li>
+                    }
+
+                </ul>
+
             </div>
+
         </div>
+
     </nav>
+
+    <!-- CONTENT -->
     <div class="container body-content">
+
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
     </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-custom"
+            style="background:#0d6efd;
+               color:white;
+               padding:30px 0;
+               margin-top:50px;">
+
+        <div class="container">
+
+            <div class="row text-center">
+
+                <div class="col-md-3">
+                    <h4>Language Center</h4>
+                    <p>Learn English<br />Build Your Future</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>Contact</h4>
+                    <p>support@languagecenter.com</p>
+                    <p>0123 456 789</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>Programs</h4>
+                    <p>English Communication</p>
+                    <p>IELTS Preparation</p>
+                    <p>TOEIC Preparation</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>Follow Us</h4>
+                    <p>Facebook</p>
+                    <p>Instagram</p>
+                    <p>YouTube</p>
+                </div>
+
+            </div>
+
+            <hr style="border-color:rgba(255,255,255,0.3);" />
+
+            <div class="text-center">
+                © @DateTime.Now.Year - Language Center Management System
+            </div>
+
+        </div>
+
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("scripts", required: false)
+
 </body>
 </html>

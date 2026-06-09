@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Payment>
+@{
+    ViewBag.Title = "Lịch sử thanh toán học phí";
+}
+
+<h2 style="margin-top:30px; color: #6f42c1; font-weight: bold;">Lịch sử thanh toán học phí</h2>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr style="background-color: #6f42c1; color: white;">
+                <th>Mã hóa đơn</th>
+                <th>Mã đăng ký học</th>
+                <th>Số tiền (VNĐ)</th>
+                <th>Ngày thanh toán</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.PaymentID</td>
+
+                        <td>@item.registrationID</td>
+
+                        <td style="font-weight:bold; color:#28a745;">
+                            @item.amount.ToString("N0")đ
+                        </td>
+
+                        <td>
+                        <td>@(Convert.ToDateTime(item.paymentDate).ToString("dd/MM/yyyy HH:mm"))</td>
+                        </td>
+
+                        <td>
+                            @if (item.paymentStatus == "Paid" || item.paymentStatus == "Đã đóng")
+                            {
+                                <span class="label label-success" style="padding: 5px 10px;">Đã đóng</span>
+                            }
+                            else
+                            {
+                                <span class="label label-danger" style="padding: 5px 10px;">Chưa đóng</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted" style="padding: 20px;">Bạn chưa có lịch sử thanh toán nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
