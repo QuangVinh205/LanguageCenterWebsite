@@ -63,6 +63,9 @@ namespace LanguageCenterWebsite.Models
     partial void InsertProgram(Program instance);
     partial void UpdateProgram(Program instance);
     partial void DeleteProgram(Program instance);
+    partial void InsertMaterial(Material instance);
+    partial void UpdateMaterial(Material instance);
+    partial void DeleteMaterial(Material instance);
     #endregion
 		
 		public LanguageDbDataContext(string connection) : 
@@ -88,15 +91,8 @@ namespace LanguageCenterWebsite.Models
 		{
 			OnCreated();
 		}
-
-        public LanguageDbDataContext() :
-        base(global::System.Configuration.ConfigurationManager.ConnectionStrings[
-        "LanguageWebConnectionString"].ConnectionString, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public System.Data.Linq.Table<Class> Classes
+		
+		public System.Data.Linq.Table<Class> Classes
 		{
 			get
 			{
@@ -183,6 +179,14 @@ namespace LanguageCenterWebsite.Models
 				return this.GetTable<Program>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Material> Materials
+		{
+			get
+			{
+				return this.GetTable<Material>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Class")]
@@ -208,6 +212,8 @@ namespace LanguageCenterWebsite.Models
 		private EntitySet<ClassSchedule> _ClassSchedules;
 		
 		private EntitySet<Registration> _Registrations;
+		
+		private EntitySet<Material> _Materials;
 		
 		private EntityRef<ClassStatus> _ClassStatus;
 		
@@ -239,6 +245,7 @@ namespace LanguageCenterWebsite.Models
 		{
 			this._ClassSchedules = new EntitySet<ClassSchedule>(new Action<ClassSchedule>(this.attach_ClassSchedules), new Action<ClassSchedule>(this.detach_ClassSchedules));
 			this._Registrations = new EntitySet<Registration>(new Action<Registration>(this.attach_Registrations), new Action<Registration>(this.detach_Registrations));
+			this._Materials = new EntitySet<Material>(new Action<Material>(this.attach_Materials), new Action<Material>(this.detach_Materials));
 			this._ClassStatus = default(EntityRef<ClassStatus>);
 			this._Teacher = default(EntityRef<Teacher>);
 			this._Program = default(EntityRef<Program>);
@@ -423,6 +430,19 @@ namespace LanguageCenterWebsite.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Class_Material", Storage="_Materials", ThisKey="ClassID", OtherKey="classID")]
+		public EntitySet<Material> Materials
+		{
+			get
+			{
+				return this._Materials;
+			}
+			set
+			{
+				this._Materials.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ClassStatus_Class", Storage="_ClassStatus", ThisKey="statusID", OtherKey="StatusID", IsForeignKey=true)]
 		public ClassStatus ClassStatus
 		{
@@ -564,6 +584,18 @@ namespace LanguageCenterWebsite.Models
 		}
 		
 		private void detach_Registrations(Registration entity)
+		{
+			this.SendPropertyChanging();
+			entity.Class = null;
+		}
+		
+		private void attach_Materials(Material entity)
+		{
+			this.SendPropertyChanging();
+			entity.Class = this;
+		}
+		
+		private void detach_Materials(Material entity)
 		{
 			this.SendPropertyChanging();
 			entity.Class = null;
@@ -886,185 +918,183 @@ namespace LanguageCenterWebsite.Models
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Consultation")]
 	public partial class Consultation : INotifyPropertyChanging, INotifyPropertyChanged
 	{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _ConsultationID;
-	
-	private string _fullName;
-	
-	private string _email;
-	
-	private string _phone;
-	
-	private string _question;
-	
-	private string _requestStatus;
-    internal int StudentId;
-    internal string Question;
-
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ConsultationID;
+		
+		private string _fullName;
+		
+		private string _email;
+		
+		private string _phone;
+		
+		private string _question;
+		
+		private string _requestStatus;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
-partial void OnValidate(System.Data.Linq.ChangeAction action);
-partial void OnCreated();
-partial void OnConsultationIDChanging(int value);
-partial void OnConsultationIDChanged();
-partial void OnfullNameChanging(string value);
-partial void OnfullNameChanged();
-partial void OnemailChanging(string value);
-partial void OnemailChanged();
-partial void OnphoneChanging(string value);
-partial void OnphoneChanged();
-partial void OnquestionChanging(string value);
-partial void OnquestionChanged();
-partial void OnrequestStatusChanging(string value);
-partial void OnrequestStatusChanged();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnConsultationIDChanging(int value);
+    partial void OnConsultationIDChanged();
+    partial void OnfullNameChanging(string value);
+    partial void OnfullNameChanged();
+    partial void OnemailChanging(string value);
+    partial void OnemailChanged();
+    partial void OnphoneChanging(string value);
+    partial void OnphoneChanged();
+    partial void OnquestionChanging(string value);
+    partial void OnquestionChanged();
+    partial void OnrequestStatusChanging(string value);
+    partial void OnrequestStatusChanged();
     #endregion
-	
-	public Consultation()
-	{
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsultationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int ConsultationID
-	{
-		get
+		
+		public Consultation()
 		{
-			return this._ConsultationID;
+			OnCreated();
 		}
-		set
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsultationID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ConsultationID
 		{
-			if ((this._ConsultationID != value))
+			get
 			{
-				this.OnConsultationIDChanging(value);
-				this.SendPropertyChanging();
-				this._ConsultationID = value;
-				this.SendPropertyChanged("ConsultationID");
-				this.OnConsultationIDChanged();
+				return this._ConsultationID;
+			}
+			set
+			{
+				if ((this._ConsultationID != value))
+				{
+					this.OnConsultationIDChanging(value);
+					this.SendPropertyChanging();
+					this._ConsultationID = value;
+					this.SendPropertyChanged("ConsultationID");
+					this.OnConsultationIDChanged();
+				}
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-	public string fullName
-	{
-		get
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_fullName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string fullName
 		{
-			return this._fullName;
-		}
-		set
-		{
-			if ((this._fullName != value))
+			get
 			{
-				this.OnfullNameChanging(value);
-				this.SendPropertyChanging();
-				this._fullName = value;
-				this.SendPropertyChanged("fullName");
-				this.OnfullNameChanged();
+				return this._fullName;
+			}
+			set
+			{
+				if ((this._fullName != value))
+				{
+					this.OnfullNameChanging(value);
+					this.SendPropertyChanging();
+					this._fullName = value;
+					this.SendPropertyChanged("fullName");
+					this.OnfullNameChanged();
+				}
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="VarChar(100)")]
-	public string email
-	{
-		get
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_email", DbType="VarChar(100)")]
+		public string email
 		{
-			return this._email;
-		}
-		set
-		{
-			if ((this._email != value))
+			get
 			{
-				this.OnemailChanging(value);
-				this.SendPropertyChanging();
-				this._email = value;
-				this.SendPropertyChanged("email");
-				this.OnemailChanged();
+				return this._email;
+			}
+			set
+			{
+				if ((this._email != value))
+				{
+					this.OnemailChanging(value);
+					this.SendPropertyChanging();
+					this._email = value;
+					this.SendPropertyChanged("email");
+					this.OnemailChanged();
+				}
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_phone", DbType="VarChar(20)")]
-	public string phone
-	{
-		get
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_phone", DbType="VarChar(20)")]
+		public string phone
 		{
-			return this._phone;
-		}
-		set
-		{
-			if ((this._phone != value))
+			get
 			{
-				this.OnphoneChanging(value);
-				this.SendPropertyChanging();
-				this._phone = value;
-				this.SendPropertyChanged("phone");
-				this.OnphoneChanged();
+				return this._phone;
+			}
+			set
+			{
+				if ((this._phone != value))
+				{
+					this.OnphoneChanging(value);
+					this.SendPropertyChanging();
+					this._phone = value;
+					this.SendPropertyChanged("phone");
+					this.OnphoneChanged();
+				}
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_question", DbType="NVarChar(MAX)")]
-	public string question
-	{
-		get
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_question", DbType="NVarChar(MAX)")]
+		public string question
 		{
-			return this._question;
-		}
-		set
-		{
-			if ((this._question != value))
+			get
 			{
-				this.OnquestionChanging(value);
-				this.SendPropertyChanging();
-				this._question = value;
-				this.SendPropertyChanged("question");
-				this.OnquestionChanged();
+				return this._question;
+			}
+			set
+			{
+				if ((this._question != value))
+				{
+					this.OnquestionChanging(value);
+					this.SendPropertyChanging();
+					this._question = value;
+					this.SendPropertyChanged("question");
+					this.OnquestionChanged();
+				}
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_requestStatus", DbType="VarChar(20)")]
-	public string requestStatus
-	{
-		get
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_requestStatus", DbType="VarChar(20)")]
+		public string requestStatus
 		{
-			return this._requestStatus;
-		}
-		set
-		{
-			if ((this._requestStatus != value))
+			get
 			{
-				this.OnrequestStatusChanging(value);
-				this.SendPropertyChanging();
-				this._requestStatus = value;
-				this.SendPropertyChanged("requestStatus");
-				this.OnrequestStatusChanged();
+				return this._requestStatus;
+			}
+			set
+			{
+				if ((this._requestStatus != value))
+				{
+					this.OnrequestStatusChanging(value);
+					this.SendPropertyChanging();
+					this._requestStatus = value;
+					this.SendPropertyChanged("requestStatus");
+					this.OnrequestStatusChanged();
+				}
 			}
 		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
 		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
 		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
+		
+		protected virtual void SendPropertyChanged(String propertyName)
 		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
-	}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Payment")]
@@ -2062,10 +2092,8 @@ partial void OnrequestStatusChanged();
 				}
 			}
 		}
-
-        public string password { get; internal set; }
-
-        public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		
@@ -2830,6 +2858,229 @@ partial void OnrequestStatusChanged();
 		{
 			this.SendPropertyChanging();
 			entity.Program = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Material")]
+	public partial class Material : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _MaterialID;
+		
+		private int _classID;
+		
+		private string _materialName;
+		
+		private string _description;
+		
+		private string _documentPath;
+		
+		private System.Nullable<System.DateTime> _uploadDate;
+		
+		private EntityRef<Class> _Class;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMaterialIDChanging(int value);
+    partial void OnMaterialIDChanged();
+    partial void OnclassIDChanging(int value);
+    partial void OnclassIDChanged();
+    partial void OnmaterialNameChanging(string value);
+    partial void OnmaterialNameChanged();
+    partial void OndescriptionChanging(string value);
+    partial void OndescriptionChanged();
+    partial void OndocumentPathChanging(string value);
+    partial void OndocumentPathChanged();
+    partial void OnuploadDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnuploadDateChanged();
+    #endregion
+		
+		public Material()
+		{
+			this._Class = default(EntityRef<Class>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaterialID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int MaterialID
+		{
+			get
+			{
+				return this._MaterialID;
+			}
+			set
+			{
+				if ((this._MaterialID != value))
+				{
+					this.OnMaterialIDChanging(value);
+					this.SendPropertyChanging();
+					this._MaterialID = value;
+					this.SendPropertyChanged("MaterialID");
+					this.OnMaterialIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_classID", DbType="Int NOT NULL")]
+		public int classID
+		{
+			get
+			{
+				return this._classID;
+			}
+			set
+			{
+				if ((this._classID != value))
+				{
+					if (this._Class.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnclassIDChanging(value);
+					this.SendPropertyChanging();
+					this._classID = value;
+					this.SendPropertyChanged("classID");
+					this.OnclassIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_materialName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string materialName
+		{
+			get
+			{
+				return this._materialName;
+			}
+			set
+			{
+				if ((this._materialName != value))
+				{
+					this.OnmaterialNameChanging(value);
+					this.SendPropertyChanging();
+					this._materialName = value;
+					this.SendPropertyChanged("materialName");
+					this.OnmaterialNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_description", DbType="NVarChar(MAX)")]
+		public string description
+		{
+			get
+			{
+				return this._description;
+			}
+			set
+			{
+				if ((this._description != value))
+				{
+					this.OndescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._description = value;
+					this.SendPropertyChanged("description");
+					this.OndescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_documentPath", DbType="NVarChar(500)")]
+		public string documentPath
+		{
+			get
+			{
+				return this._documentPath;
+			}
+			set
+			{
+				if ((this._documentPath != value))
+				{
+					this.OndocumentPathChanging(value);
+					this.SendPropertyChanging();
+					this._documentPath = value;
+					this.SendPropertyChanged("documentPath");
+					this.OndocumentPathChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_uploadDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> uploadDate
+		{
+			get
+			{
+				return this._uploadDate;
+			}
+			set
+			{
+				if ((this._uploadDate != value))
+				{
+					this.OnuploadDateChanging(value);
+					this.SendPropertyChanging();
+					this._uploadDate = value;
+					this.SendPropertyChanged("uploadDate");
+					this.OnuploadDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Class_Material", Storage="_Class", ThisKey="classID", OtherKey="ClassID", IsForeignKey=true)]
+		public Class Class
+		{
+			get
+			{
+				return this._Class.Entity;
+			}
+			set
+			{
+				Class previousValue = this._Class.Entity;
+				if (((previousValue != value) 
+							|| (this._Class.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Class.Entity = null;
+						previousValue.Materials.Remove(this);
+					}
+					this._Class.Entity = value;
+					if ((value != null))
+					{
+						value.Materials.Add(this);
+						this._classID = value.ClassID;
+					}
+					else
+					{
+						this._classID = default(int);
+					}
+					this.SendPropertyChanged("Class");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }
