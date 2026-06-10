@@ -1,0 +1,72 @@
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Consultation>
+
+@{
+    ViewBag.Title = "Consultation Management";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="fw-bold mb-4">Consultation Requests</h2>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Contact</th>
+                    <th>Question</th>
+                    <th>Status</th>
+                    <th style="width:180px;">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ConsultationID</td>
+                        <td class="fw-bold">@item.fullName</td>
+
+                        <td>
+                            <div>@item.email</div>
+                            <div>@item.phone</div>
+                        </td>
+
+                        <td>@item.question</td>
+
+                        <td>
+                            @if (item.requestStatus == "Done")
+                            {
+                                <span class="badge bg-success">Done</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.requestStatus == "Done")
+                            {
+                                <a href="@Url.Action("MarkPending", "Consultation", new { area = "Admin", id = item.ConsultationID })"
+                                   class="btn btn-sm btn-outline-warning">
+                                    Set Pending
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("MarkDone", "Consultation", new { area = "Admin", id = item.ConsultationID })"
+                                   class="btn btn-sm btn-outline-success">
+                                    Mark Done
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

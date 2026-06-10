@@ -211,7 +211,7 @@ namespace LanguageCenterWebsite.Controllers
                             Session["FullName"] = student.fullName;
                         }
 
-                        return RedirectToAction("MyProfile", "Student");
+                        return RedirectToAction("Index", "Home");
                     }
                     else if (user.role == "Teacher")
                     {
@@ -223,17 +223,13 @@ namespace LanguageCenterWebsite.Controllers
                             Session["FullName"] = teacher.fullName;
                         }
 
-                        return RedirectToAction("Index", "Teacher");
+                        return RedirectToAction("Index", "Home");
                     }
                     else if (user.role == "Admin")
                     {
                         Session["FullName"] = "Admin";
 
-                        return RedirectToAction(
-                            "Index",
-                            "Dashboard",
-                            new { area = "Admin" }
-                        );
+                        return RedirectToAction("Index", "Home");
                     }
                 }
 

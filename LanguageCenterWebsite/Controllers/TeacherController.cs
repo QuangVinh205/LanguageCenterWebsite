@@ -284,5 +284,102 @@ namespace LanguageCenterWebsite.Controllers
             return View(feedbackList);
         }
 
+        [HttpGet]
+        public ActionResult Profile()
+        {
+            int teacherId = 1; // sau này lấy từ Session
+
+            var teacher = (from t in db.Teachers
+                           join u in db.UserAccounts
+                           on t.userID equals u.UserID
+                           where t.TeacherID == teacherId
+                           select new TeacherProfileViewModel
+                           {
+                               TeacherID = t.TeacherID,
+                               FullName = t.fullName,
+                               Avatar = t.avatar,
+                               Expertise = t.expertise,
+                               Bio = t.bio,
+                               Email = u.email
+                           }).FirstOrDefault();
+
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(teacher);
+        }
+
+        [HttpGet]
+        public ActionResult EditProfile()
+        {
+            int teacherId = 1; // sau này đổi sang Session["TeacherID"]
+
+            var model = (from t in db.Teachers
+                         join u in db.UserAccounts
+                         on t.userID equals u.UserID
+                         where t.TeacherID == teacherId
+                         select new EditTeacherProfileViewModel
+                         {
+                             TeacherID = t.TeacherID,
+                             FullName = t.fullName,
+                             Avatar = t.avatar,
+                             Expertise = t.expertise,
+                             Bio = t.bio,
+                             Email = u.email
+                         }).FirstOrDefault();
+
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProfile(EditTeacherProfileViewModel model, HttpPostedFileBase uploadAvatar)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var teacher = db.Teachers.FirstOrDefault(t => t.TeacherID == model.TeacherID);
+
+            if (teacher == null)
+            {
+                return HttpNotFound();
+            }
+
+            teacher.fullName = model.FullName;
+            teacher.expertise = model.Expertise;
+            teacher.bio = model.Bio;
+
+            if (uploadAvatar != null && uploadAvatar.ContentLength > 0)
+            {
+                string folderPath = Server.MapPath("~/Uploads/Teachers/");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                string fileName = DateTime.Now.Ticks + "_" + Path.GetFileName(uploadAvatar.FileName);
+                string physicalPath = Path.Combine(folderPath, fileName);
+
+                uploadAvatar.SaveAs(physicalPath);
+
+                teacher.avatar = "/Uploads/Teachers/" + fileName;
+            }
+
+            db.SubmitChanges();
+
+            TempData["Success"] = "Profile updated successfully.";
+
+            return RedirectToAction("Profile");
+        }
     }
 }

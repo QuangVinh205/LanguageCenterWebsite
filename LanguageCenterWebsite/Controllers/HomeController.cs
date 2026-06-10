@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using LanguageCenterWebsite.Models;
 namespace LanguageCenterWebsite.Controllers
 {
@@ -13,16 +14,21 @@ namespace LanguageCenterWebsite.Controllers
         // 1/ View Home (Banner, Lớp mới, Giáo viên)
         public ActionResult Index()
         {
-            ViewBag.NewClasses = db.Classes.OrderByDescending(c => c.ClassID).Take(4).ToList();
+            ViewBag.NewClasses = db.Classes
+                .Where(c => c.statusID == 1)
+                .Take(4)
+                .ToList();
+
             ViewBag.Teachers = db.Teachers.Take(4).ToList();
+
+            ViewBag.Programs = db.Programs.Take(3).ToList();
+
             return View();
         }
 
         // 2/ View Program List (Tìm kiếm, Lọc) Pagination
-        public ActionResult ProgramList(string searchString,string levelFilter,int page = 1)
+        public ActionResult ProgramList(string searchString, string levelFilter, int? page)
         {
-            int pageSize = 6;
-
             var programs = db.Programs.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
@@ -37,12 +43,14 @@ namespace LanguageCenterWebsite.Controllers
                     p => p.level == levelFilter);
             }
 
-            var result = programs
-                            .Skip((page - 1) * pageSize)
-                            .Take(pageSize)
-                            .ToList();
+            int pageSize = 6;
+            int pageNumber = page ?? 1;
 
-            return View(result);
+            return View(
+                programs
+                .OrderBy(p => p.ProgramID)
+                .ToPagedList(pageNumber, pageSize)
+            );
         }
 
         // 3/ View Program Detail (Chi tiết và Lớp liên quan)
@@ -55,9 +63,37 @@ namespace LanguageCenterWebsite.Controllers
             return View(program);
         }
 
-        public ActionResult test()
+        public ActionResult ClassList(string searchString, int? page)
         {
-            return View();
+            var classes = db.Classes
+                .Where(c => c.statusID == 1)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                classes = classes.Where(c =>
+                    c.className.Contains(searchString));
+            }
+
+            int pageSize = 8;
+            int pageNumber = page ?? 1;
+
+            return View(
+                classes
+                .OrderBy(c => c.ClassID)
+                .ToPagedList(pageNumber, pageSize)
+            );
+        }
+
+        public ActionResult ClassDetail(int id)
+        {
+            var cls = db.Classes
+                        .FirstOrDefault(c => c.ClassID == id);
+
+            if (cls == null)
+                return HttpNotFound();
+
+            return View(cls);
         }
     }
 }

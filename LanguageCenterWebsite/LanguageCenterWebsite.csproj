@@ -142,6 +142,12 @@
     <Reference Include="Microsoft.VisualStudio.Services.WebApi, Version=20.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Services.Client.20.256.2\lib\net472\Microsoft.VisualStudio.Services.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -290,6 +296,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\ClassController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ConsultationController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\PlacementTestController.cs" />
@@ -312,6 +319,7 @@
     </Compile>
     <Compile Include="Models\ClassMaterialViewModel.cs" />
     <Compile Include="Models\ClassStudentViewModel.cs" />
+    <Compile Include="Models\EditTeacherProfileViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
     <Compile Include="Models\LanguageDb.designer.cs">
@@ -324,6 +332,7 @@
     <Compile Include="Models\TeacherClassViewModel.cs" />
     <Compile Include="Models\TeacherDashboardViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\TeacherProfileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -344,11 +353,21 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\img\banner.png" />
-    <Content Include="Content\img\teacher\teacher_1.jpg" />
-    <Content Include="Content\img\teacher\teacher_2.jpg" />
-    <Content Include="Content\img\teacher\teacher_3.jpg" />
-    <Content Include="Content\img\teacher\teacher_4.jpg" />
-    <Content Include="Content\img\teacher\teacher_5.jpg" />
+    <Content Include="Content\img\classes\class1.jpg" />
+    <Content Include="Content\img\classes\class2.jpg" />
+    <Content Include="Content\img\classes\class3.jpg" />
+    <Content Include="Content\img\classes\class4.jpg" />
+    <Content Include="Content\img\programs\program1.jpg" />
+    <Content Include="Content\img\programs\program2.jpg" />
+    <Content Include="Content\img\programs\program3.jpg" />
+    <Content Include="Content\img\programs\program4.jpg" />
+    <Content Include="Content\img\programs\program5.jpg" />
+    <Content Include="Content\img\teacher\teacher1.jpg" />
+    <Content Include="Content\img\teacher\teacher2.jpg" />
+    <Content Include="Content\img\teacher\teacher3.jpg" />
+    <Content Include="Content\img\teacher\teacher4.jpg" />
+    <Content Include="Content\img\teacher\teacher5.jpg" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -393,6 +412,7 @@
     <Content Include="Areas\Admin\Views\PlacementTest\Create.cshtml" />
     <Content Include="Areas\Admin\Views\PlacementTest\UpdateResult.cshtml" />
     <Content Include="Areas\Admin\Views\Registration\Cancel.cshtml" />
+    <Content Include="Areas\Admin\Views\Consultation\Index.cshtml" />
     <None Include="Models\LanguageDb.dbml.layout">
       <DependentUpon>LanguageDb.dbml</DependentUpon>
     </None>
@@ -437,6 +457,11 @@
     <Content Include="Views\Teacher\ManageMaterials.cshtml" />
     <Content Include="Views\Teacher\PlacementTestResults.cshtml" />
     <Content Include="Views\Teacher\StudentFeedback.cshtml" />
+    <Content Include="Views\Home\ClassList.cshtml" />
+    <Content Include="Views\Home\ClassDetail.cshtml" />
+    <Content Include="Views\Student\Register.cshtml" />
+    <Content Include="Views\Teacher\Profile.cshtml" />
+    <Content Include="Views\Teacher\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

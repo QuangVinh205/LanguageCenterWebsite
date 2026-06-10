@@ -13,7 +13,7 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @Styles.Render("~/Content/PagedList.css")
     <style>
         body {
             background-color: #f8fafc;
@@ -43,10 +43,10 @@
             -webkit-text-fill-color: transparent;
             transition: transform 0.2s ease;
         }
-        
-        .navbar-brand:hover {
-            transform: scale(1.02);
-        }
+
+            .navbar-brand:hover {
+                transform: scale(1.02);
+            }
 
         .navbar-nav .nav-link {
             color: #94a3b8 !important;
@@ -58,17 +58,17 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .navbar-nav .nav-link:hover {
-            color: #f8fafc !important;
-            background-color: rgba(255, 255, 255, 0.08);
-        }
+            .navbar-nav .nav-link:hover {
+                color: #f8fafc !important;
+                background-color: rgba(255, 255, 255, 0.08);
+            }
 
-        /* Active link indicator */
-        .navbar-nav .active > .nav-link,
-        .navbar-nav .nav-link.active {
-            color: #ffffff !important;
-            background-color: rgba(59, 130, 246, 0.15);
-        }
+            /* Active link indicator */
+            .navbar-nav .active > .nav-link,
+            .navbar-nav .nav-link.active {
+                color: #ffffff !important;
+                background-color: rgba(59, 130, 246, 0.15);
+            }
 
         .navbar-toggler {
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -77,9 +77,9 @@
             outline: none;
         }
 
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-        }
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+            }
 
         .navbar-toggler-icon {
             filter: invert(1);
@@ -101,6 +101,41 @@
             border-radius: 8px;
             border: 1px solid rgba(167, 139, 250, 0.2);
         }
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 48px;
+            min-width: 220px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0,0,0,.15);
+            padding: 12px;
+            z-index: 9999;
+        }
+
+            .user-dropdown-menu.show {
+                display: block;
+            }
+
+        .dropdown-link {
+            display: block;
+            padding: 10px 14px;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+            .dropdown-link:hover {
+                background: #f1f5f9;
+                color: #2563eb;
+                text-decoration: none;
+            }
     </style>
 </head>
 <body>
@@ -125,162 +160,98 @@
                  id="mainMenu">
 
                 <!-- LEFT MENU -->
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav">
+
                     <li class="nav-item">
-                        @Html.ActionLink("Home","Index", "Home", new { area = "" },new { @class = "nav-link" })
+                        @Html.ActionLink("Home",
+                            "Index",
+                            "Home",
+                            new { area = "" },
+                            new { @class = "nav-link" })
                     </li>
+
                     <li class="nav-item">
-                        @Html.ActionLink("Programs","ProgramList","Home", new { area = "" },new { @class = "nav-link" })
+                        @Html.ActionLink("Programs",
+                            "ProgramList",
+                            "Home",
+                            new { area = "" },
+                            new { @class = "nav-link" })
                     </li>
 
-                    @if (Session["Role"] != null)
-                    {
-                        string role = Session["Role"].ToString();
-
-                        if (role == "Student")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("My Profile","MyProfile", "Student", new { area = "" },new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("My Classes",
-                                    "MyClasses",
-                                    "Student",
-                                    new { area = "" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Payment", "Payment","Student", new { area = "" }, new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Placement Test","PlacementTest", "Student", new { area = "" }, new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Consultation",
-                                    "Consultation",
-                                    "Student",
-                                    new { area = "" },
-                                    new { @class = "nav-link" })
-                            </li>
-                        }
-
-                        else if (role == "Teacher")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("Dashboard",
-                                    "Index",
-                                    "Teacher",
-                                    new { area = "" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("My Classes",
-                                    "MyClasses",
-                                    "Teacher",
-                                    new { area = "" },
-                                    new { @class = "nav-link" })
-                            </li>
-                        }
-
-                        else if (role == "Admin")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("Dashboard",
-                                    "Index",
-                                    "Dashboard",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Programs",
-                                    "Index",
-                                    "Program",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Teachers",
-                                    "Index",
-                                    "Teacher",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Students",
-                                    "Index",
-                                    "Student",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Classes",
-                                    "Index",
-                                    "Class",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-
-                            <li class="nav-item">
-                                @Html.ActionLink("Registrations",
-                                    "Index",
-                                    "Registration",
-                                    new { area = "Admin" },
-                                    new { @class = "nav-link" })
-                            </li>
-                        }
-                    }
+                    @* Các menu Student / Teacher / Admin giữ nguyên *@
 
                 </ul>
 
                 <!-- RIGHT MENU -->
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto">
 
                     @if (Session["UserId"] != null)
                     {
-                        <li class="nav-item">
-                            <span class="nav-link hello-user">
-                                Hello,
-                                @(Session["FullName"] ??
-                                  Session["UserEmail"])
-                            </span>
-                        </li>
+                        <li class="nav-item user-dropdown">
 
-                        <li class="nav-item">
-                            @Html.ActionLink(
-                                "Logout",
-                                "Logout",
-                                "Account",
-                                null,
-                                new { @class = "nav-link" })
+                            <a href="javascript:void(0)"
+                               class="nav-link hello-user"
+                               onclick="toggleUserMenu()">
+                                Hello, @(Session["FullName"] ?? Session["UserEmail"])
+                            </a>
+
+                            <div id="userMenu" class="user-dropdown-menu">
+
+                                @if (Session["Role"] != null && Session["Role"].ToString() == "Student")
+                                {
+                                    @Html.ActionLink("My Profile", "MyProfile", "Student", null, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("My Classes", "MyClasses", "Student", null, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Payment", "Payment", "Student", null, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Placement Test", "PlacementTest", "Student", null, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Consultation", "Consultation", "Student", null, new { @class = "dropdown-link" })
+                                }
+
+                                @if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                                {
+                                    @Html.ActionLink("Admin Dashboard", "Index", "Dashboard", new { area = "Admin" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Programs", "Index", "Program", new { area = "Admin" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Teachers", "Index", "Teacher", new { area = "Admin" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Students", "Index", "Student", new { area = "Admin" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Classes", "Index", "Class", new { area = "Admin" }, new { @class = "dropdown-link" })
+                                }
+
+                                @if (Session["Role"] != null && Session["Role"].ToString() == "Teacher")
+                                {
+                                    @Html.ActionLink("Profile", "Profile", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Teacher Dashboard", "Index", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("My Classes", "MyClasses", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Placement Test", "PlacementTestResults", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Class Students", "ClassStudents", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+                                    @Html.ActionLink("Feed Back", "StudentFeedback", "Teacher", new { area = "" }, new { @class = "dropdown-link" })
+
+                                    
+
+                                }
+                                <hr />
+
+                                @Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "dropdown-link text-danger fw-bold" })
+
+                            </div>
+
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            @Html.ActionLink(
-                                "Register",
-                                "Register",
-                                "Account",
-                                null,
-                                new { @class = "nav-link" })
+                            @Html.ActionLink("Register", "Register", "Account", null, new { @class = "nav-link" })
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item ms-2">
                             @Html.ActionLink(
                                 "Login",
                                 "Login",
                                 "Account",
                                 null,
-                                new { @class = "nav-link" })
+                                new
+                                {
+                                    @class = "btn btn-primary rounded-3 px-3",
+                                    style = "background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;"
+                                })
                         </li>
                     }
 
@@ -350,3 +321,18 @@
 
 </body>
 </html>
+
+<script>
+    function toggleUserMenu() {
+        var menu = document.getElementById("userMenu");
+        menu.classList.toggle("show");
+    }
+    document.addEventListener("click", function (event) {
+        var dropdown = document.querySelector(".user-dropdown");
+        var menu = document.getElementById("userMenu");
+
+        if (dropdown && menu && !dropdown.contains(event.target)) {
+            menu.classList.remove("show");
+        }
+    });
+</script>

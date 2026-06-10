@@ -1,18 +1,18 @@
-﻿@model IEnumerable<LanguageCenterWebsite.Models.Payment>
+﻿@model IEnumerable<LanguageCenterWebsite.Models.PlacementTest>
 
 @{
-    ViewBag.Title = "Payment History";
+    ViewBag.Title = "Placement Test";
 }
 
 <div class="container my-5">
 
     <div class="text-center mb-5">
         <h1 class="fw-bold" style="font-weight:800;color:#0f172a;">
-            Payment History
+            Placement Test
         </h1>
 
         <p class="text-muted">
-            View your tuition payment records and payment status.
+            View your placement test registration and results.
         </p>
 
         <div style="width:70px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;margin:0 auto;"></div>
@@ -33,38 +33,60 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
 
                                 <span class="badge"
-                                      style="background:rgba(59,130,246,.1);color:#2563eb;">
-                                    Invoice #@item.PaymentID
+                                      style="background:rgba(59,130,246,.1);color:#2563eb;font-weight:700;">
+                                    Test #@item.TestID
                                 </span>
 
-                                @if (item.paymentStatus == "Paid" || item.paymentStatus == "Đã đóng")
+                                @if (item.status == "Completed")
                                 {
                                     <span class="badge" style="background:#22c55e;">
-                                        Paid
+                                        Completed
+                                    </span>
+                                }
+                                else if (item.status == "Pending")
+                                {
+                                    <span class="badge" style="background:#f59e0b;">
+                                        Pending
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="badge" style="background:#ef4444;">
-                                        Unpaid
+                                    <span class="badge" style="background:#64748b;">
+                                        @item.status
                                     </span>
                                 }
 
                             </div>
 
-                            <h3 class="fw-bold mb-3" style="color:#16a34a;">
-                                @item.amount.ToString("N0")đ
+                            <h3 class="fw-bold mb-3" style="color:#0f172a;">
+                                @item.levelRequested
                             </h3>
 
                             <p class="text-muted mb-2">
-                                <strong>Registration ID:</strong>
-                                @item.registrationID
+                                <strong>Test Date:</strong>
+                                @(item.testDate.HasValue
+                                    ? item.testDate.Value.ToString("dd/MM/yyyy")
+                                    : "N/A")
+                            </p>
+
+                            <p class="text-muted mb-2">
+                                <strong>Test Time:</strong>
+                                @(item.testTime.HasValue
+                                    ? item.testTime.Value.ToString(@"hh\:mm")
+                                    : "N/A")
+                            </p>
+
+                            <p class="text-muted mb-2">
+                                <strong>Suggested Level:</strong>
+                                @(string.IsNullOrEmpty(item.suggestedLevel)
+                                    ? "N/A"
+                                    : item.suggestedLevel)
                             </p>
 
                             <p class="text-muted mb-0">
-                                <strong>Payment Date:</strong>
-                                @(item.paymentDate.HasValue
-                                    ? item.paymentDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                <strong>Result Score:</strong>
+                                @(item.resultScore.HasValue
+                                    ? item.resultScore.Value.ToString("N1")
                                     : "N/A")
                             </p>
 
@@ -82,11 +104,11 @@
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body text-center p-5">
                 <h3 class="text-muted">
-                    No payment history found.
+                    No placement test found.
                 </h3>
 
                 <p class="text-secondary">
-                    Your tuition payment records will appear here.
+                    Your placement test information will appear here.
                 </p>
             </div>
         </div>

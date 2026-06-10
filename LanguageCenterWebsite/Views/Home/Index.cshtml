@@ -5,105 +5,192 @@
 <!-- HERO BANNER -->
 <div class="card border-0 overflow-hidden shadow-lg position-relative text-white rounded-4 my-4"
      style="background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75)), url('/Content/img/banner.png') center/cover no-repeat; min-height: 380px;">
-    
+
     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-5">
-        
-        <h1 class="display-3 fw-extrabold text-uppercase tracking-tight mb-3" style="font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+
+        <h1 class="display-3 fw-extrabold text-uppercase tracking-tight mb-3"
+            style="font-weight:800; letter-spacing:-1px; background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
             Language Center
         </h1>
-        
-        <p class="fs-4 fw-medium text-light mb-4 max-w-2xl">
+
+        <p class="fs-4 fw-medium text-light mb-4">
             Learn English - Build Your Future
         </p>
-        
-        <p class="fs-6 text-muted mb-5 max-w-lg" style="color: #cbd5e1 !important; max-width: 550px;">
+
+        <p class="fs-6 text-muted mb-5"
+           style="color:#cbd5e1 !important; max-width:550px;">
             Explore our professional language programs and find the perfect course to advance your career and communication skills today.
         </p>
-        
+
         <a href="@Url.Action("ProgramList","Home")"
            class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-3 shadow-md border-0"
-           style="background: linear-gradient(135deg, #2563eb, #7c3aed); transition: all 0.3s ease;">
+           style="background:linear-gradient(135deg,#2563eb,#7c3aed);">
             Explore Programs
         </a>
-        
+
     </div>
 </div>
 
 <!-- NEWEST CLASSES -->
 <div class="container my-5">
     <div class="d-flex flex-column align-items-center mb-5">
-        <h2 class="fw-extrabold text-center mb-2" style="font-weight: 800; color: #0f172a;">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
             Newest Classes
         </h2>
-        <div style="width: 60px; height: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 2px;"></div>
+
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
     </div>
 
     <div class="row g-4">
         @foreach (var item in ViewBag.NewClasses)
         {
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative hover-lift"
-                     style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: #ffffff;">
-                    
-                    <img src="~/Content/img/class.jpg"
-                         class="card-img-top"
-                         alt="Class Image"
-                         style="width: 100%; height: 160px; object-fit: cover;" />
-                    
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift"
+                     style="background:#ffffff;">
+
+                <img src="@Url.Content("~/Content/img/classes/class" + item.ClassID + ".jpg")"
+                     class="card-img-top"
+                     alt="@item.className"
+                     style="width:100%;height:200px;object-fit:cover;" />
                     <div class="card-body p-4">
-                        <span class="badge mb-2" style="background: rgba(59, 130, 246, 0.1); color: #2563eb; font-weight: 700;">Active</span>
+
+                        <span class="badge mb-2"
+                              style="background:rgba(59,130,246,.1);color:#2563eb;font-weight:700;">
+                            Active
+                        </span>
+
                         <h5 class="card-title fw-bold text-dark mb-3">
                             @item.className
                         </h5>
-                        
-                        <div class="d-flex flex-column gap-2 text-muted" style="font-size: 14px;">
+
+                        <div class="d-flex flex-column gap-2 text-muted"
+                             style="font-size:14px;">
+
                             <div class="d-flex justify-content-between">
                                 <span><strong>Room:</strong></span>
                                 <span class="text-dark fw-medium">@item.room</span>
                             </div>
+
                             <div class="d-flex justify-content-between">
                                 <span><strong>Max Students:</strong></span>
                                 <span class="text-dark fw-medium">@item.maxStudents</span>
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
             </div>
         }
     </div>
 </div>
 
+<!-- LANGUAGE PROGRAMS -->
+<div class="container my-5">
+    <div class="d-flex flex-column align-items-center mb-5">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
+            Our Programs
+        </h2>
+
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
+    </div>
+
+    <div class="row g-4">
+
+        @if (ViewBag.Programs != null)
+        {
+            foreach (var program in ViewBag.Programs)
+            {
+                <div class="col-12 col-md-4">
+
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift">
+
+                       <img src="@Url.Content(program.imageUrl)"
+                            class="card-img-top"
+                            alt="@program.programName"
+                            style="width:100%;height:180px;object-fit:cover;" />
+
+                        <div class="card-body p-4">
+
+                            <span class="badge mb-3"
+                                  style="background:rgba(139,92,246,.1);color:#7c3aed;font-weight:700;">
+                                @program.level
+                            </span>
+
+                            <h4 class="fw-bold mb-3" style="color:#0f172a;">
+                                @program.programName
+                            </h4>
+
+                            <p class="text-muted mb-2">
+                                <strong>Duration:</strong>
+                                @program.duration
+                            </p>
+
+                            <p class="text-muted mb-0">
+                                <strong>Fee:</strong>
+                                @(program.fee != null ? program.fee.ToString("N0") + " VND" : "Contact")
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0 p-4 pt-0">
+
+                            <a href="@Url.Action("ProgramDetail", "Home", new { id = program.ProgramID })"
+                               class="btn btn-primary btn-block"
+                               style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:0;">
+                                View Detail
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="@Url.Action("ProgramList","Home")"
+           class="btn btn-outline-primary btn-lg px-5">
+            View All Programs
+        </a>
+    </div>
+</div>
+
 <!-- FEATURED TEACHERS -->
 <div class="container my-5">
     <div class="d-flex flex-column align-items-center mb-5">
-        <h2 class="fw-extrabold text-center mb-2" style="font-weight: 800; color: #0f172a;">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
             Featured Teachers
         </h2>
-        <div style="width: 60px; height: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 2px;"></div>
+
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
     </div>
 
     <div class="row g-4">
         @foreach (var teacher in ViewBag.Teachers)
         {
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift"
-                     style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: #ffffff;">
-                    
-                    <div class="position-relative d-inline-block mx-auto mb-4">
-                        <img src="~/Content/img/teacher.jpg"
-                             class="rounded-circle shadow-sm"
-                             alt="Teacher Portrait"
-                             style="width: 120px; height: 120px; object-fit: cover; border: 4px solid rgba(59, 130, 246, 0.15);" />
-                    </div>
-
-                    <h5 class="fw-bold text-dark mb-1">
-                        @teacher.fullName
-                    </h5>
-
-                    <p class="text-primary fw-semibold small mb-0">
-                        @teacher.expertise
-                    </p>
+                <div class="mb-3">
+                    <img src="@Url.Content("~/Content/img/teacher/" + teacher.avatar)"
+                         alt="@teacher.fullName"
+                         class="img-fluid shadow-sm"
+                         style="width:100%;height:100%;object-fit:cover;border-radius:16px;" />
                 </div>
+
+                <h5 class="fw-bold text-dark mb-1">
+                    @teacher.fullName
+                </h5>
+
+                <p class="text-primary fw-semibold small mb-0">
+                    @teacher.expertise
+                </p>
             </div>
         }
     </div>
@@ -113,31 +200,43 @@
 <div class="bg-white py-5 border-top border-bottom border-light">
     <div class="container my-3">
         <div class="row g-4 text-center">
-            
+
             <div class="col-12 col-md-4">
-                <div class="p-4 rounded-4" style="background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.1);">
-                    <h1 class="display-5 fw-extrabold text-primary mb-2" style="font-weight: 800;">
+                <div class="p-4 rounded-4"
+                     style="background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.1);">
+                    <h1 class="display-5 fw-extrabold text-primary mb-2"
+                        style="font-weight:800;">
                         5,000+
                     </h1>
-                    <span class="fs-6 fw-semibold text-muted text-uppercase tracking-wider">Active Students</span>
+                    <span class="fs-6 fw-semibold text-muted text-uppercase">
+                        Active Students
+                    </span>
                 </div>
             </div>
 
             <div class="col-12 col-md-4">
-                <div class="p-4 rounded-4" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1);">
-                    <h1 class="display-5 fw-extrabold text-success mb-2" style="font-weight: 800;">
+                <div class="p-4 rounded-4"
+                     style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.1);">
+                    <h1 class="display-5 fw-extrabold text-success mb-2"
+                        style="font-weight:800;">
                         100+
                     </h1>
-                    <span class="fs-6 fw-semibold text-muted text-uppercase tracking-wider">Courses & Classes</span>
+                    <span class="fs-6 fw-semibold text-muted text-uppercase">
+                        Courses & Classes
+                    </span>
                 </div>
             </div>
 
             <div class="col-12 col-md-4">
-                <div class="p-4 rounded-4" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.1);">
-                    <h1 class="display-5 fw-extrabold text-warning mb-2" style="font-weight: 800;">
+                <div class="p-4 rounded-4"
+                     style="background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.1);">
+                    <h1 class="display-5 fw-extrabold text-warning mb-2"
+                        style="font-weight:800;">
                         50+
                     </h1>
-                    <span class="fs-6 fw-semibold text-muted text-uppercase tracking-wider">Expert Teachers</span>
+                    <span class="fs-6 fw-semibold text-muted text-uppercase">
+                        Expert Teachers
+                    </span>
                 </div>
             </div>
 
@@ -148,48 +247,65 @@
 <!-- WHY CHOOSE US -->
 <div class="container my-5 py-3">
     <div class="d-flex flex-column align-items-center mb-5">
-        <h2 class="fw-extrabold text-center mb-2" style="font-weight: 800; color: #0f172a;">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
             Why Choose Us?
         </h2>
-        <div style="width: 60px; height: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 2px;"></div>
+
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
     </div>
 
     <div class="row g-4">
-        
+
         <div class="col-12 col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift" style="transition: all 0.3s ease;">
-                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle" 
-                     style="width: 70px; height: 70px; background: rgba(59, 130, 246, 0.1); font-size: 32px;">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift">
+                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle"
+                     style="width:70px;height:70px;background:rgba(59,130,246,.1);font-size:32px;">
                     🎓
                 </div>
-                <h4 class="fw-bold text-dark mb-3">Professional Teachers</h4>
-                <p class="text-muted mb-0" style="font-size: 15px; line-height: 1.6;">
+
+                <h4 class="fw-bold text-dark mb-3">
+                    Professional Teachers
+                </h4>
+
+                <p class="text-muted mb-0"
+                   style="font-size:15px;line-height:1.6;">
                     Experienced native and local teachers certified with standard international English education methodologies.
                 </p>
             </div>
         </div>
 
         <div class="col-12 col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift" style="transition: all 0.3s ease;">
-                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle" 
-                     style="width: 70px; height: 70px; background: rgba(139, 92, 246, 0.1); font-size: 32px;">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift">
+                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle"
+                     style="width:70px;height:70px;background:rgba(139,92,246,.1);font-size:32px;">
                     📚
                 </div>
-                <h4 class="fw-bold text-dark mb-3">Modern Programs</h4>
-                <p class="text-muted mb-0" style="font-size: 15px; line-height: 1.6;">
+
+                <h4 class="fw-bold text-dark mb-3">
+                    Modern Programs
+                </h4>
+
+                <p class="text-muted mb-0"
+                   style="font-size:15px;line-height:1.6;">
                     Dynamic curriculums designed to focus on real-world communication skills, along with focused IELTS/TOEIC test preparation.
                 </p>
             </div>
         </div>
 
         <div class="col-12 col-md-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift" style="transition: all 0.3s ease;">
-                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle" 
-                     style="width: 70px; height: 70px; background: rgba(236, 72, 153, 0.1); font-size: 32px;">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center hover-lift">
+                <div class="d-flex align-items-center justify-content-center mx-auto mb-4 rounded-circle"
+                     style="width:70px;height:70px;background:rgba(236,72,153,.1);font-size:32px;">
                     🏆
                 </div>
-                <h4 class="fw-bold text-dark mb-3">High Success Rate</h4>
-                <p class="text-muted mb-0" style="font-size: 15px; line-height: 1.6;">
+
+                <h4 class="fw-bold text-dark mb-3">
+                    High Success Rate
+                </h4>
+
+                <p class="text-muted mb-0"
+                   style="font-size:15px;line-height:1.6;">
                     Thousands of students have successfully achieved their target scores and unlocked major global career achievements.
                 </p>
             </div>
@@ -199,8 +315,12 @@
 </div>
 
 <style>
-    .hover-lift:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+    .hover-lift {
+        transition: all .3s ease;
     }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
 </style>

@@ -1,112 +1,95 @@
-﻿@model IEnumerable<LanguageCenterWebsite.Models.Program>
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<LanguageCenterWebsite.Models.Program>
 
 @{
-    ViewBag.Title = "Programs";
+    ViewBag.Title = "Program List";
 }
 
 <div class="container my-5">
 
-    <div class="text-center mb-5">
-        <h1 class="fw-bold" style="font-weight:800;color:#0f172a;">
-            Language Programs
-        </h1>
+    <div class="d-flex flex-column align-items-center mb-5">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
+            Our Programs
+        </h2>
 
-        <p class="text-muted">
-            Choose the program that matches your learning goal.
-        </p>
-
-        <div style="width:70px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;margin:0 auto;"></div>
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 mb-5">
-        <div class="card-body p-4">
+    <form method="get" class="mb-5">
+        <div class="row g-3">
 
-            @using (Html.BeginForm("ProgramList", "Home", FormMethod.Get))
-            {
-                <div class="row g-3 align-items-center">
+            <div class="col-12 col-md-7">
+                <input type="text"
+                       name="searchString"
+                       value="@Request["searchString"]"
+                       class="form-control border-0 shadow-sm px-4 py-3 rounded-4"
+                       placeholder="Search program..." />
+            </div>
 
-                    <div class="col-md-6">
-                        <input type="text"
-                               name="searchString"
-                               value="@ViewBag.SearchString"
-                               class="form-control"
-                               placeholder="Search program..." />
-                    </div>
+            <div class="col-12 col-md-3">
+                <select name="levelFilter"
+                        class="form-control border-0 shadow-sm px-4 py-3 rounded-4">
+                    <option value="">All Levels</option>
+                    <option value="Beginner" @(Request["levelFilter"] == "Beginner" ? "selected" : "")>Beginner</option>
+                    <option value="Intermediate" @(Request["levelFilter"] == "Intermediate" ? "selected" : "")>Intermediate</option>
+                    <option value="Advanced" @(Request["levelFilter"] == "Advanced" ? "selected" : "")>Advanced</option>
+                </select>
+            </div>
 
-                    <div class="col-md-3">
-                        <select name="levelFilter" class="form-control">
-                            <option value="">All Levels</option>
-
-                            <option value="Beginner"
-                                    @(ViewBag.LevelFilter == "Beginner" ? "selected" : null)>
-                                Beginner
-                            </option>
-
-                            <option value="Intermediate"
-                                    @(ViewBag.LevelFilter == "Intermediate" ? "selected" : null)>
-                                Intermediate
-                            </option>
-
-                            <option value="Advanced"
-                                    @(ViewBag.LevelFilter == "Advanced" ? "selected" : null)>
-                                Advanced
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <button type="submit"
-                                class="btn btn-primary btn-block"
-                                style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:0;">
-                            Search
-                        </button>
-                    </div>
-
-                </div>
-            }
+            <div class="col-12 col-md-2">
+                <button class="btn btn-primary w-100 py-3 fw-bold rounded-4 border-0"
+                        style="background:linear-gradient(135deg,#2563eb,#7c3aed);">
+                    Search
+                </button>
+            </div>
 
         </div>
-    </div>
+    </form>
 
     <div class="row g-4">
 
-        @foreach (var item in Model)
+        @foreach (var program in Model)
         {
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-lg-4">
 
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift">
 
-                    <img src="~/Content/img/class.jpg"
+                    <img src="@Url.Content(program.imageUrl ?? "/Content/img/programs/default.jpg")"
                          class="card-img-top"
-                         style="height:180px;object-fit:cover;"
-                         alt="Program Image" />
+                         alt="@program.programName"
+                         style="width:100%;height:220px;object-fit:cover;" />
 
                     <div class="card-body p-4">
 
                         <span class="badge mb-3"
-                              style="background:rgba(59,130,246,.1);color:#2563eb;">
-                            @item.level
+                              style="background:rgba(139,92,246,.1);color:#7c3aed;font-weight:700;">
+                            @program.level
                         </span>
 
-                        <h4 class="fw-bold mb-3" style="color:#0f172a;">
-                            @item.programName
+                        <h4 class="fw-bold mb-3"
+                            style="color:#0f172a;">
+                            @program.programName
                         </h4>
 
-                        <p class="text-muted">
-                            <strong>Duration:</strong> @item.duration
+                        <p class="text-muted mb-2">
+                            <strong>Duration:</strong>
+                            @program.duration
                         </p>
 
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             <strong>Fee:</strong>
-                            @(item.fee.HasValue ? item.fee.Value.ToString("N0") + " VND" : "Contact")
+                            @program.fee.ToString() VND
                         </p>
 
                     </div>
 
                     <div class="card-footer bg-white border-0 p-4 pt-0">
 
-                        <a href="@Url.Action("ProgramDetail", "Home", new { id = item.ProgramID })"
-                           class="btn btn-outline-primary btn-block">
+                        <a href="@Url.Action("ProgramDetail", "Home", new { id = program.ProgramID })"
+                           class="btn btn-primary w-100 fw-bold rounded-3 border-0"
+                           style="background:linear-gradient(135deg,#2563eb,#7c3aed);">
                             View Detail
                         </a>
 
@@ -119,32 +102,16 @@
 
     </div>
 
-    <div class="text-center mt-5">
-
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-        {
-            if (i == ViewBag.CurrentPage)
+    <div class="d-flex justify-content-center mt-5 paged-style">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("ProgramList", new
             {
-                <span class="btn btn-primary mx-1">
-                    @i
-                </span>
-            }
-            else
-            {
-                <a class="btn btn-outline-primary mx-1"
-                   href="@Url.Action(
-                        "ProgramList",
-                        new
-                        {
-                            page = i,
-                            searchString = ViewBag.SearchString,
-                            levelFilter = ViewBag.LevelFilter
-                        })">
-                    @i
-                </a>
-            }
-        }
-
+                page,
+                searchString = Request["searchString"],
+                levelFilter = Request["levelFilter"]
+            })
+        )
     </div>
 
 </div>
@@ -157,5 +124,25 @@
         .hover-lift:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+
+    .paged-style .pagination {
+        gap: 8px;
+    }
+
+        .paged-style .pagination li a,
+        .paged-style .pagination li span {
+            border: 0;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+        }
+
+        .paged-style .pagination .active span {
+            color: #ffffff;
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
         }
 </style>

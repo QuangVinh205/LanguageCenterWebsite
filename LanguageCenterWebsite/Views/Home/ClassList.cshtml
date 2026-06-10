@@ -1,0 +1,134 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<LanguageCenterWebsite.Models.Class>
+
+@{
+    ViewBag.Title = "Class List";
+}
+
+<div class="container my-5">
+
+    <div class="d-flex flex-column align-items-center mb-5">
+        <h2 class="fw-extrabold text-center mb-2"
+            style="font-weight:800;color:#0f172a;">
+            Available Classes
+        </h2>
+
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
+    </div>
+
+    <form method="get" class="mb-5">
+        <div class="input-group shadow-sm rounded-4 overflow-hidden">
+            <input type="text"
+                   name="searchString"
+                   value="@Request["searchString"]"
+                   class="form-control border-0 px-4 py-3"
+                   placeholder="Search class..." />
+
+            <button class="btn btn-primary px-4 fw-bold border-0"
+                    style="background:linear-gradient(135deg,#2563eb,#7c3aed);">
+                Search
+            </button>
+        </div>
+    </form>
+
+    <div class="row g-4">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-3">
+
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift"
+                     style="background:#ffffff;">
+
+                    <img src="@Url.Content("~/Content/img/classes/class" + item.ClassID + ".jpg")"
+                         class="card-img-top"
+                         alt="@item.className"
+                         style="width:100%;height:200px;object-fit:cover;" />
+
+                    <div class="card-body p-4">
+
+                        <span class="badge mb-2"
+                              style="background:rgba(59,130,246,.1);color:#2563eb;font-weight:700;">
+                            Active
+                        </span>
+
+                        <h5 class="card-title fw-bold text-dark mb-3">
+                            @item.className
+                        </h5>
+
+                        <div class="d-flex flex-column gap-2 text-muted"
+                             style="font-size:14px;">
+
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Room:</strong></span>
+                                <span class="text-dark fw-medium">@item.room</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Max Students:</strong></span>
+                                <span class="text-dark fw-medium">@item.maxStudents</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer bg-white border-0 p-4 pt-0">
+                        <a href="@Url.Action("ClassDetail","Home",new { id = item.ClassID })"
+                           class="btn btn-primary w-100 fw-bold rounded-3 border-0"
+                           style="background:linear-gradient(135deg,#2563eb,#7c3aed);">
+                            View Detail
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="d-flex justify-content-center mt-5 paged-style">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("ClassList", new
+            {
+                page,
+                searchString = Request["searchString"]
+            })
+        )
+    </div>
+
+</div>
+
+<style>
+    .hover-lift {
+        transition: all .3s ease;
+    }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+
+    .paged-style .pagination {
+        gap: 8px;
+    }
+
+        .paged-style .pagination li a,
+        .paged-style .pagination li span {
+            border: 0;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,.06);
+        }
+
+        .paged-style .pagination .active span {
+            color: #ffffff;
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
+        }
+</style>

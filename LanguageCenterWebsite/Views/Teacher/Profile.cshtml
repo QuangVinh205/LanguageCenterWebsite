@@ -1,0 +1,60 @@
+﻿@model LanguageCenterWebsite.Models.TeacherProfileViewModel
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-3 text-center">
+
+                    @if (!string.IsNullOrEmpty(Model.Avatar))
+                    {
+                        <img src="@Url.Content(Model.Avatar)"
+                             class="img-thumbnail"
+                             style="width:220px;height:280px;object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/default-avatar.png"
+                             class="img-thumbnail"
+                             style="width:220px;height:280px;object-fit:cover;" />
+                    }
+
+                </div>
+
+                <div class="col-md-9">
+
+                    <h2>@Model.FullName</h2>
+
+                    <hr />
+
+                    <p>
+                        <strong>Email:</strong>
+                        @Model.Email
+                    </p>
+
+                    <p>
+                        <strong>Expertise:</strong>
+                        @Model.Expertise
+                    </p>
+
+                    <p>
+                        <strong>Bio:</strong>
+                        @Model.Bio
+                    </p>
+                    <p>
+                        @Html.ActionLink("Edit Profile", "EditProfile", "Teacher", null, new { @class = "btn btn-primary" })
+                    </p>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+</div>
