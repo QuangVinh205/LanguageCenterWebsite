@@ -94,6 +94,20 @@
                             <strong>Max Students:</strong> @item.maxStudents
                         </p>
 
+                        <hr />
+
+                        @using (Html.BeginForm("RegisterClass", "Student", FormMethod.Post))
+                        {
+                            <input type="hidden"
+                                   name="classId"
+                                   value="@item.ClassID" />
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-block"
+                                    style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:0;">
+                                Register Class
+                            </button>
+                        }
                     </div>
                 </div>
             </div>

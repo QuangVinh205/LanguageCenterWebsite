@@ -288,7 +288,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\ClassController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
@@ -304,13 +303,10 @@
     <Compile Include="Areas\Admin\Models\RegistrationViewModel.cs" />
     <Compile Include="Areas\Admin\Models\StudentViewModel.cs" />
     <Compile Include="Areas\Admin\Models\TeacherViewModel.cs" />
-
     <Compile Include="Controllers\AccountController.cs" />
-
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
-	  
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -328,7 +324,6 @@
     <Compile Include="Models\TeacherClassViewModel.cs" />
     <Compile Include="Models\TeacherDashboardViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
-
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +344,11 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\img\banner.png" />
+    <Content Include="Content\img\teacher\teacher_1.jpg" />
+    <Content Include="Content\img\teacher\teacher_2.jpg" />
+    <Content Include="Content\img\teacher\teacher_3.jpg" />
+    <Content Include="Content\img\teacher\teacher_4.jpg" />
+    <Content Include="Content\img\teacher\teacher_5.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -432,11 +432,11 @@
     <Content Include="Views\Home\ProgramList.cshtml" />
     <Content Include="Views\Home\ProgramDetail.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
-	<Content Include="Views\Teacher\ClassStudents.cshtml" />
-	<Content Include="Views\Teacher\MyClasses.cshtml" />
-	<Content Include="Views\Teacher\ManageMaterials.cshtml" />
-	<Content Include="Views\Teacher\PlacementTestResults.cshtml" />
-	<Content Include="Views\Teacher\StudentFeedback.cshtml" />  
+    <Content Include="Views\Teacher\ClassStudents.cshtml" />
+    <Content Include="Views\Teacher\MyClasses.cshtml" />
+    <Content Include="Views\Teacher\ManageMaterials.cshtml" />
+    <Content Include="Views\Teacher\PlacementTestResults.cshtml" />
+    <Content Include="Views\Teacher\StudentFeedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

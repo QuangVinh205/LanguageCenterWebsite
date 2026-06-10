@@ -12,7 +12,15 @@ namespace LanguageCenterWebsite.Controllers
         private LanguageDbDataContext db = new LanguageDbDataContext();
 
         // Hàm tiện ích lấy ID học viên từ Session
-        private int GetCurrentStudentId() => Convert.ToInt32(Session["StudentId"]);
+        private int GetCurrentStudentId()
+        {
+            if (Session["StudentID"] == null)
+            {
+                return 0;
+            }
+
+            return Convert.ToInt32(Session["StudentID"]);
+        }
 
         // ==========================================
         // 1/ MY PROFILE (View, Update, Change Password, Upload Avatar)
@@ -200,4 +208,6 @@ namespace LanguageCenterWebsite.Controllers
             return RedirectToAction("Consultation");
         }
     }
+
+
 }
