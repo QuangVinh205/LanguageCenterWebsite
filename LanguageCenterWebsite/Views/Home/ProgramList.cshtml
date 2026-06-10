@@ -4,124 +4,158 @@
     ViewBag.Title = "Programs";
 }
 
-<h2 class="text-center mb-4">Language Programs</h2>
+<div class="container my-5">
 
-@using (Html.BeginForm("ProgramList", "Home", FormMethod.Get))
-{
-    <div class="row mb-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="font-weight:800;color:#0f172a;">
+            Language Programs
+        </h1>
 
-        <div class="col-md-5">
-            <input type="text"
-                   name="searchString"
-                   value="@ViewBag.SearchString"
-                   class="form-control"
-                   placeholder="Search Program..." />
-        </div>
+        <p class="text-muted">
+            Choose the program that matches your learning goal.
+        </p>
 
-        <div class="col-md-3">
-            <select name="levelFilter"
-                    class="form-control">
-
-                <option value="">All Levels</option>
-
-                <option value="Beginner"
-                        @(ViewBag.LevelFilter == "Beginner" ? "selected" : null)>
-                    Beginner
-                </option>
-
-                <option value="Intermediate"
-                        @(ViewBag.LevelFilter == "Intermediate" ? "selected" : null)>
-                    Intermediate
-                </option>
-
-                <option value="Advanced"
-                        @(ViewBag.LevelFilter == "Advanced" ? "selected" : null)>
-                    Advanced
-                </option>
-
-            </select>
-        </div>
-
-        <div class="col-md-2">
-            <button type="submit"
-                    class="btn btn-primary w-100">
-                Search
-            </button>
-        </div>
-
+        <div style="width:70px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;margin:0 auto;"></div>
     </div>
-}
 
-<div class="row">
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
+        <div class="card-body p-4">
 
-    @foreach (var item in Model)
-    {
-        <div class="col-md-4 mb-4">
+            @using (Html.BeginForm("ProgramList", "Home", FormMethod.Get))
+            {
+                <div class="row g-3 align-items-center">
 
-            <div class="card shadow-sm h-100">
+                    <div class="col-md-6">
+                        <input type="text"
+                               name="searchString"
+                               value="@ViewBag.SearchString"
+                               class="form-control"
+                               placeholder="Search program..." />
+                    </div>
 
-                <div class="card-body">
+                    <div class="col-md-3">
+                        <select name="levelFilter" class="form-control">
+                            <option value="">All Levels</option>
 
-                    <h4 class="card-title text-primary">
-                        @item.programName
-                    </h4>
+                            <option value="Beginner"
+                                    @(ViewBag.LevelFilter == "Beginner" ? "selected" : null)>
+                                Beginner
+                            </option>
 
-                    <p>
-                        <strong>Level:</strong>
-                        @item.level
-                    </p>
+                            <option value="Intermediate"
+                                    @(ViewBag.LevelFilter == "Intermediate" ? "selected" : null)>
+                                Intermediate
+                            </option>
 
-                    <p>
-                        <strong>Duration:</strong>
-                        @item.duration
-                    </p>
+                            <option value="Advanced"
+                                    @(ViewBag.LevelFilter == "Advanced" ? "selected" : null)>
+                                Advanced
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit"
+                                class="btn btn-primary btn-block"
+                                style="background:linear-gradient(135deg,#2563eb,#7c3aed);border:0;">
+                            Search
+                        </button>
+                    </div>
 
                 </div>
+            }
 
-                <div class="card-footer bg-white">
+        </div>
+    </div>
 
-                    <a href="@Url.Action(
-                                "ProgramDetail",
-                                new { id = item.ProgramID })"
-                       class="btn btn-outline-primary">
-                        View Detail
-                    </a>
+    <div class="row g-4">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-lift">
+
+                    <img src="~/Content/img/class.jpg"
+                         class="card-img-top"
+                         style="height:180px;object-fit:cover;"
+                         alt="Program Image" />
+
+                    <div class="card-body p-4">
+
+                        <span class="badge mb-3"
+                              style="background:rgba(59,130,246,.1);color:#2563eb;">
+                            @item.level
+                        </span>
+
+                        <h4 class="fw-bold mb-3" style="color:#0f172a;">
+                            @item.programName
+                        </h4>
+
+                        <p class="text-muted">
+                            <strong>Duration:</strong> @item.duration
+                        </p>
+
+                        <p class="text-muted">
+                            <strong>Fee:</strong>
+                            @(item.fee.HasValue ? item.fee.Value.ToString("N0") + " VND" : "Contact")
+                        </p>
+
+                    </div>
+
+                    <div class="card-footer bg-white border-0 p-4 pt-0">
+
+                        <a href="@Url.Action("ProgramDetail", "Home", new { id = item.ProgramID })"
+                           class="btn btn-outline-primary btn-block">
+                            View Detail
+                        </a>
+
+                    </div>
 
                 </div>
 
             </div>
+        }
 
-        </div>
-    }
+    </div>
+
+    <div class="text-center mt-5">
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            if (i == ViewBag.CurrentPage)
+            {
+                <span class="btn btn-primary mx-1">
+                    @i
+                </span>
+            }
+            else
+            {
+                <a class="btn btn-outline-primary mx-1"
+                   href="@Url.Action(
+                        "ProgramList",
+                        new
+                        {
+                            page = i,
+                            searchString = ViewBag.SearchString,
+                            levelFilter = ViewBag.LevelFilter
+                        })">
+                    @i
+                </a>
+            }
+        }
+
+    </div>
 
 </div>
 
-<hr />
-
-<div class="text-center">
-
-    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-    {
-        if (i == ViewBag.CurrentPage)
-        {
-            <span class="btn btn-primary">
-                @i
-            </span>
-        }
-        else
-        {
-            <a class="btn btn-outline-primary"
-               href="@Url.Action(
-                    "ProgramList",
-                    new
-                    {
-                        page = i,
-                        searchString = ViewBag.SearchString,
-                        levelFilter = ViewBag.LevelFilter
-                    })">
-                @i
-            </a>
-        }
+<style>
+    .hover-lift {
+        transition: all .3s ease;
     }
 
-</div>
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+</style>

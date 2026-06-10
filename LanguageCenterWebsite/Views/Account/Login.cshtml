@@ -4,10 +4,10 @@
     ViewBag.Title = "Login";
 }
 
-<div class="row" style="margin-top:60px;">
-    <div class="col-md-4 col-md-offset-4">
+<div class="login-wrapper">
+    <div class="login-box">
 
-        <div class="panel panel-primary" style="box-shadow:0 4px 15px rgba(0,0,0,0.15); border-radius:8px;">
+        <div class="panel panel-primary login-panel">
 
             <div class="panel-heading text-center">
                 <h3 class="panel-title">
@@ -20,30 +20,25 @@
                 @using (Html.BeginForm("Login", "Account", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Email, "Email Address")
-
                         @Html.TextBoxFor(m => m.Email, new
                         {
                             @class = "form-control",
                             placeholder = "Enter email"
                         })
-
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Password, "Password")
-
                         @Html.PasswordFor(m => m.Password, new
                         {
                             @class = "form-control",
                             placeholder = "Enter password"
                         })
-
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
 
@@ -54,8 +49,7 @@
                         </label>
                     </div>
 
-                    <button type="submit"
-                            class="btn btn-primary btn-block">
+                    <button type="submit" class="btn btn-primary btn-block">
                         Login
                     </button>
 
@@ -68,11 +62,30 @@
                 }
 
             </div>
-
         </div>
 
     </div>
 </div>
+
+<style>
+    .login-wrapper {
+        min-height: 75vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .login-panel {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        border-radius: 8px;
+    }
+
+</style>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

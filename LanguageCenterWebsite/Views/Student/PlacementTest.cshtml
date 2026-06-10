@@ -1,221 +1,106 @@
-﻿@model IEnumerable<LanguageCenterWebsite.Models.PlacementTest>
+﻿@model IEnumerable<LanguageCenterWebsite.Models.Payment>
 
 @{
-    ViewBag.Title = "Placement Test";
+    ViewBag.Title = "Payment History";
 }
 
-<div class="container mt-4">
+<div class="container my-5">
 
-    <div class="text-center mb-4">
-        <h2 class="fw-bold text-primary">
-            Placement Test Registration
-        </h2>
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="font-weight:800;color:#0f172a;">
+            Payment History
+        </h1>
 
         <p class="text-muted">
-            Register for an English placement test to determine the most suitable class level.
+            View your tuition payment records and payment status.
         </p>
+
+        <div style="width:70px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;margin:0 auto;"></div>
     </div>
 
-    <div class="row">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
 
-        <!-- FORM -->
-        <div class="col-md-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
 
-            <div class="card shadow-sm">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 hover-lift">
 
-                <div class="card-header bg-primary text-white">
-                    <strong>Register New Test</strong>
-                </div>
+                        <div class="card-body p-4">
 
-                <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
 
-                    @using (Html.BeginForm("RegisterPlacementTest",
-                                           "Student",
-                                           FormMethod.Post))
-                    {
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Test Date
-                            </label>
+                                <span class="badge"
+                                      style="background:rgba(59,130,246,.1);color:#2563eb;">
+                                    Invoice #@item.PaymentID
+                                </span>
 
-                            <input type="date"
-                                   name="testDate"
-                                   class="form-control"
-                                   min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                                   required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Test Session
-                            </label>
-
-                            <select name="testTime"
-                                    class="form-control"
-                                    required>
-
-                                <option value="08:00">
-                                    08:00 - Morning
-                                </option>
-
-                                <option value="14:00">
-                                    14:00 - Afternoon
-                                </option>
-
-                                <option value="18:00">
-                                    18:00 - Evening
-                                </option>
-
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Desired Level
-                            </label>
-
-                            <input type="text"
-                                   name="level"
-                                   class="form-control"
-                                   placeholder="Beginner, IELTS, TOEIC..."
-                                   required />
-                        </div>
-
-                        <button type="submit"
-                                class="btn btn-primary w-100">
-
-                            Register
-
-                        </button>
-                    }
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- HISTORY -->
-        <div class="col-md-8">
-
-            <div class="card shadow-sm">
-
-                <div class="card-header">
-                    <strong>
-                        Test Registration History
-                    </strong>
-                </div>
-
-                <div class="card-body">
-
-                    <div class="table-responsive">
-
-                        <table class="table table-bordered table-hover align-middle">
-
-                            <thead class="table-primary">
-
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Level</th>
-                                    <th>Status</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                                @if (Model != null && Model.Any())
+                                @if (item.paymentStatus == "Paid" || item.paymentStatus == "Đã đóng")
                                 {
-                                    foreach (var item in Model)
-                                    {
-                                        <tr>
-
-                                            <td>
-                                                @item.TestID
-                                            </td>
-
-                                            <td>
-                                                @(item.testDate != null
-                                                    ? Convert.ToDateTime(item.testDate)
-                                                        .ToString("dd/MM/yyyy")
-                                                    : "")
-                                            </td>
-
-                                            <td>
-                                                @item.testTime
-                                            </td>
-
-                                            <td>
-                                                @item.suggestedLevel
-                                            </td>
-
-                                            <td>
-
-                                                @if (item.status == "Pending" ||
-                                                     string.IsNullOrEmpty(item.status))
-                                                {
-                                                    <span class="badge bg-warning text-dark">
-                                                        Pending
-                                                    </span>
-                                                }
-                                                else if (item.status == "Approved")
-                                                {
-                                                    <span class="badge bg-success">
-                                                        Approved
-                                                    </span>
-                                                }
-                                                else if (item.status == "Completed")
-                                                {
-                                                    <span class="badge bg-info">
-                                                        Completed
-                                                    </span>
-                                                }
-                                                else if (item.status == "Rejected")
-                                                {
-                                                    <span class="badge bg-danger">
-                                                        Rejected
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-secondary">
-                                                        @item.status
-                                                    </span>
-                                                }
-
-                                            </td>
-
-                                        </tr>
-                                    }
+                                    <span class="badge" style="background:#22c55e;">
+                                        Paid
+                                    </span>
                                 }
                                 else
                                 {
-                                    <tr>
-
-                                        <td colspan="5"
-                                            class="text-center text-muted">
-
-                                            No placement test registration found.
-
-                                        </td>
-
-                                    </tr>
+                                    <span class="badge" style="background:#ef4444;">
+                                        Unpaid
+                                    </span>
                                 }
 
-                            </tbody>
+                            </div>
 
-                        </table>
+                            <h3 class="fw-bold mb-3" style="color:#16a34a;">
+                                @item.amount.ToString("N0")đ
+                            </h3>
+
+                            <p class="text-muted mb-2">
+                                <strong>Registration ID:</strong>
+                                @item.registrationID
+                            </p>
+
+                            <p class="text-muted mb-0">
+                                <strong>Payment Date:</strong>
+                                @(item.paymentDate.HasValue
+                                    ? item.paymentDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                    : "N/A")
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
-
-            </div>
+            }
 
         </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body text-center p-5">
+                <h3 class="text-muted">
+                    No payment history found.
+                </h3>
 
-    </div>
+                <p class="text-secondary">
+                    Your tuition payment records will appear here.
+                </p>
+            </div>
+        </div>
+    }
 
 </div>
+
+<style>
+    .hover-lift {
+        transition: all .3s ease;
+    }
+
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+</style>

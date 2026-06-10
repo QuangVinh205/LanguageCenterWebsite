@@ -1,59 +1,106 @@
 ﻿@model IEnumerable<LanguageCenterWebsite.Models.Payment>
+
 @{
-    ViewBag.Title = "Lịch sử thanh toán học phí";
+    ViewBag.Title = "Payment History";
 }
 
-<h2 style="margin-top:30px; color: #6f42c1; font-weight: bold;">Lịch sử thanh toán học phí</h2>
-<hr />
+<div class="container my-5">
 
-<div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
-        <thead>
-            <tr style="background-color: #6f42c1; color: white;">
-                <th>Mã hóa đơn</th>
-                <th>Mã đăng ký học</th>
-                <th>Số tiền (VNĐ)</th>
-                <th>Ngày thanh toán</th>
-                <th>Trạng thái</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
+    <div class="text-center mb-5">
+        <h1 class="fw-bold" style="font-weight:800;color:#0f172a;">
+            Payment History
+        </h1>
+
+        <p class="text-muted">
+            View your tuition payment records and payment status.
+        </p>
+
+        <div style="width:70px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;margin:0 auto;"></div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+
+            @foreach (var item in Model)
             {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.PaymentID</td>
+                <div class="col-md-4">
 
-                        <td>@item.registrationID</td>
+                    <div class="card h-100 border-0 shadow-sm rounded-4 hover-lift">
 
-                        <td style="font-weight:bold; color:#28a745;">
-                            @item.amount.ToString("N0")đ
-                        </td>
+                        <div class="card-body p-4">
 
-                        <td>
-                        <td>@(Convert.ToDateTime(item.paymentDate).ToString("dd/MM/yyyy HH:mm"))</td>
-                        </td>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
 
-                        <td>
-                            @if (item.paymentStatus == "Paid" || item.paymentStatus == "Đã đóng")
-                            {
-                                <span class="label label-success" style="padding: 5px 10px;">Đã đóng</span>
-                            }
-                            else
-                            {
-                                <span class="label label-danger" style="padding: 5px 10px;">Chưa đóng</span>
-                            }
-                        </td>
-                    </tr>
-                }
+                                <span class="badge"
+                                      style="background:rgba(59,130,246,.1);color:#2563eb;">
+                                    Invoice #@item.PaymentID
+                                </span>
+
+                                @if (item.paymentStatus == "Paid" || item.paymentStatus == "Đã đóng")
+                                {
+                                    <span class="badge" style="background:#22c55e;">
+                                        Paid
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge" style="background:#ef4444;">
+                                        Unpaid
+                                    </span>
+                                }
+
+                            </div>
+
+                            <h3 class="fw-bold mb-3" style="color:#16a34a;">
+                                @item.amount.ToString("N0")đ
+                            </h3>
+
+                            <p class="text-muted mb-2">
+                                <strong>Registration ID:</strong>
+                                @item.registrationID
+                            </p>
+
+                            <p class="text-muted mb-0">
+                                <strong>Payment Date:</strong>
+                                @(item.paymentDate.HasValue
+                                    ? item.paymentDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                    : "N/A")
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
             }
-            else
-            {
-                <tr>
-                    <td colspan="5" class="text-center text-muted" style="padding: 20px;">Bạn chưa có lịch sử thanh toán nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body text-center p-5">
+                <h3 class="text-muted">
+                    No payment history found.
+                </h3>
+
+                <p class="text-secondary">
+                    Your tuition payment records will appear here.
+                </p>
+            </div>
+        </div>
+    }
+
 </div>
+
+<style>
+    .hover-lift {
+        transition: all .3s ease;
+    }
+
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+</style>

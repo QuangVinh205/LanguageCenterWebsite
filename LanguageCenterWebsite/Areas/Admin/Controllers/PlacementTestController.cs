@@ -1,5 +1,6 @@
-﻿using LanguageCenterWebsite.Areas.Admin.Models;
+using LanguageCenterWebsite.Areas.Admin.Models;
 using LanguageCenterWebsite.Models;
+using PlacementTestViewModel = LanguageCenterWebsite.Areas.Admin.Models.PlacementTestViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -70,7 +70,7 @@ namespace LanguageCenterWebsite.Controllers
             if (student == null) return HttpNotFound();
 
             // Kiểm tra mật khẩu cũ (Giả định bạn lưu plain text hoặc khớp theo cách bạn mã hóa)
-            if (student.password != oldPassword)
+            if (student.UserAccount.passwordHash != oldPassword)
             {
                 TempData["Error"] = "Mật khẩu cũ không chính xác.";
                 return RedirectToAction("MyProfile");
@@ -82,7 +82,7 @@ namespace LanguageCenterWebsite.Controllers
                 return RedirectToAction("MyProfile");
             }
 
-            student.password = newPassword; // Đổi mật khẩu mới
+            student.UserAccount.passwordHash = newPassword; // Đổi mật khẩu mới
             db.SubmitChanges();
 
             TempData["Success"] = "Đổi mật khẩu thành công!";

@@ -1,45 +1,114 @@
 ﻿@model LanguageCenterWebsite.Models.Program
 
-<h2>@Model.programName</h2>
+@{
+    ViewBag.Title = "Program Detail";
+}
 
-<p>
-    <strong>Level:</strong>
-    @Model.level
-</p>
+<div class="container my-5">
 
-<p>
-    <strong>Duration:</strong>
-    @Model.duration
-</p>
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5">
+        <div class="card-body p-5 text-white"
+             style="background: linear-gradient(135deg, #2563eb, #7c3aed);">
 
-<p>
-    <strong>Description:</strong>
-    @Model.description
-</p>
+            <span class="badge bg-light text-primary mb-3" style="font-size:14px;">
+                @Model.level
+            </span>
 
-<h3>Related Classes</h3>
+            <h1 class="fw-bold mb-3" style="font-weight:800;">
+                @Model.programName
+            </h1>
 
-<table class="table">
+            <p class="fs-5 mb-0">
+                Duration: <strong>@Model.duration</strong>
+            </p>
+        </div>
+    </div>
 
-    <tr>
-        <th>Class</th>
-        <th>Room</th>
-        <th>Max Students</th>
-    </tr>
+    <div class="row g-4">
 
-    @foreach (var item in ViewBag.RelatedClasses)
-    {
-        <tr>
-            <td>@item.className</td>
-            <td>@item.room</td>
-            <td>@item.maxStudents</td>
-        </tr>
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-3">Program Description</h3>
+                    <p class="text-muted" style="line-height:1.8;">
+                        @Model.description
+                    </p>
+
+                    <hr />
+
+                    <h3 class="fw-bold mb-3">Output Standard</h3>
+                    <p class="text-muted" style="line-height:1.8;">
+                        @Model.outputStandard
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Program Info</h4>
+
+                    <p><strong>Level:</strong> @Model.level</p>
+                    <p><strong>Duration:</strong> @Model.duration</p>
+                    <p><strong>Fee:</strong> @(Model.fee.HasValue ? Model.fee.Value.ToString("N0") + " VND" : "Contact")</p>
+
+                    <a href="@Url.Action("ProgramList", "Home")"
+                       class="btn btn-outline-primary btn-block">
+                        Back to Programs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex flex-column align-items-center my-5">
+        <h2 class="fw-bold text-center mb-2" style="font-weight:800;color:#0f172a;">
+            Related Classes
+        </h2>
+        <div style="width:60px;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;"></div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var item in ViewBag.RelatedClasses)
+        {
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 hover-lift">
+                    <div class="card-body p-4">
+
+                        <span class="badge mb-3"
+                              style="background:rgba(59,130,246,.1);color:#2563eb;">
+                            Class
+                        </span>
+
+                        <h4 class="fw-bold mb-3">
+                            @item.className
+                        </h4>
+
+                        <p class="text-muted">
+                            <strong>Room:</strong> @item.room
+                        </p>
+
+                        <p class="text-muted">
+                            <strong>Max Students:</strong> @item.maxStudents
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<style>
+    .hover-lift {
+        transition: all .3s ease;
     }
 
-</table>
-
-<p>
-    @Html.ActionLink(
-        "Back to Programs",
-        "ProgramList")
-</p>
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.08) !important;
+        }
+</style>
